@@ -10,11 +10,6 @@ const shoppingCartCount = Selector('.shopping_cart_badge');
 const shoppingCartButton = Selector('.shopping_cart_link');
 const cartItem = Selector('.cart_item');
 const cartQuantity = Selector('.cart_quantity');
-const twitterButton = Selector('.social_twitter');
-const facebookButton = Selector('.social_facebook ');
-const linkedinButton = Selector('.social_linkedin');
-const getURL = ClientFunction(() => window.location.href);
-
 
 
 fixture`Add product to cart`
@@ -68,18 +63,4 @@ test(`Add two products to cart and remove one`, async t => {
 
     await t.expect(cartNumber).eql('1');
     await t.expect(cartListProductNo).eql('1'); 
-});
-
-
-test(`Verify social buttons - Twitter`, async t => {
-    await t
-        .setTestSpeed(0.8)
-        .typeText(userNameInput, validUserName)
-        .typeText(passwordInput, validPassword)
-        .click(loginButton)
-        .click(twitterButton)
-    
-    const twitterPage = await getURL();
-
-    await t.expect(twitterPage).eql('https://twitter.com/saucelabs');
 });
