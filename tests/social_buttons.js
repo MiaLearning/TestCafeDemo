@@ -3,7 +3,7 @@ import { Selector, t, ClientFunction } from "testcafe";
 import { baseUrl, loginButton, validUserName, validPassword,
         userNameInput, passwordInput } from "./login";
 const twitterButton = Selector('.social_twitter');
-const facebookButton = Selector('.social_facebook ');
+const facebookButton = Selector('.social_facebook');
 const linkedinButton = Selector('.social_linkedin');
 const getURL = ClientFunction(() => window.location.href);
 
@@ -14,7 +14,6 @@ fixture`Social Buttons`
 
 test(`Verify social buttons - Twitter`, async t => {
     await t
-        .setTestSpeed(0.8)
         .typeText(userNameInput, validUserName)
         .typeText(passwordInput, validPassword)
         .click(loginButton)
@@ -28,7 +27,6 @@ test(`Verify social buttons - Twitter`, async t => {
 
 test(`Verify social buttons - Facebook`, async t => {
     await t
-        .setTestSpeed(0.8)
         .typeText(userNameInput, validUserName)
         .typeText(passwordInput, validPassword)
         .click(loginButton)
@@ -42,7 +40,6 @@ test(`Verify social buttons - Facebook`, async t => {
 
 test(`Verify social buttons - Linkedin`, async t => {
     await t
-        .setTestSpeed(0.8)
         .typeText(userNameInput, validUserName)
         .typeText(passwordInput, validPassword)
         .click(loginButton)
