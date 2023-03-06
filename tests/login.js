@@ -17,7 +17,7 @@ export const productTitle = Selector('.inventory_item_name');
 export const firstProductAZ = 'Sauce Labs Backpack';
 const expectedError = 'Epic sadface: Sorry, this user has been locked out.';
 const expectedLoginError = 'Epic sadface: Username and password do not match any user in this service';
-const getURL = ClientFunction(() => window.location.href);
+const getURLpage = ClientFunction(() => window.location.href);
 
 
 fixture`Authentification`
@@ -77,4 +77,28 @@ test(`Login with invalid username and password`, async t => {
 
     await t.expect(receivedError).eql(expectedLoginError)
     await t.expect(isErrorVisible).eql(true)
+});
+
+import { Selector, t, ClientFunction }  from "testcafe";
+import loginPage from '../Pages/loginPage'; 
+
+export const baseUrl = 'https://www.saucedemo.com/';
+const getURL = ClientFunction(() => window.location.href);
+
+fixture`Authentification`
+    .page(baseUrl)
+
+
+test(`Loading Login Page`, async t => { 
+    await t
+        .expect(getURL()).contains(baseUrl)
+        .expect(loginPage.loginButton.exists).ok();
+
+});
+
+
+test(`Login with valid user`, async t => {
+    await t
+        .expect(currentPage).eql('https://www.saucedemo.com/inventory.html')
+        .expect(isInventoryItemVisible).eql(true)
 });
