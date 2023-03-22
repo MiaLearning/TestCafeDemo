@@ -1,11 +1,13 @@
 import { Selector, t, ClientFunction } from "testcafe";
+import loginPage from "../Pages/loginPage";
+import productsPage from "../Pages/productsPage";
 
-import { baseUrl, loginButton, validUserName, validPassword,
-        userNameInput, passwordInput } from "./login";
-const twitterButton = Selector('.social_twitter');
-const facebookButton = Selector('.social_facebook');
-const linkedinButton = Selector('.social_linkedin');
-const getURL = ClientFunction(() => window.location.href);
+const baseUrl = 'https://www.saucedemo.com/';
+const validUserName = 'standard_user';
+const validPassword = 'secret_sauce';
+const twitterUrl = 'https://twitter.com/saucelabs';
+const facebookUrl = 'https://www.facebook.com/saucelabs';
+const linkedInUrl = 'https://www.linkedin.com/company/sauce-labs';
 
 
 fixture`Social Buttons`
@@ -13,39 +15,27 @@ fixture`Social Buttons`
 
 
 test(`Verify social buttons - Twitter`, async t => {
-    await t
-        .typeText(userNameInput, validUserName)
-        .typeText(passwordInput, validPassword)
-        .click(loginButton)
-        .click(twitterButton)
-
-    const twitterPage = await getURL();
-
-    await t.expect(twitterPage).eql('https://twitter.com/saucelabs');
+    await loginPage.typeUserName(validUserName);
+    await loginPage.typePassword(validPassword);
+    await loginPage.clickOnLoginBttn();
+    await productsPage.goToTwitter();
+    await t.expect(twitterUrl).eql('https://twitter.com/saucelabs');
 });
 
 
 test(`Verify social buttons - Facebook`, async t => {
-    await t
-        .typeText(userNameInput, validUserName)
-        .typeText(passwordInput, validPassword)
-        .click(loginButton)
-        .click(facebookButton)
-
-    const facebookPage = await getURL();
-
-    await t.expect(facebookPage).eql('https://www.facebook.com/saucelabs');
+    await loginPage.typeUserName(validUserName);
+    await loginPage.typePassword(validPassword);
+    await loginPage.clickOnLoginBttn();
+    await productsPage.goToFacebook();
+    await t.expect(facebookUrl).eql('https://www.facebook.com/saucelabs');
 });
 
 
 test(`Verify social buttons - Linkedin`, async t => {
-    await t
-        .typeText(userNameInput, validUserName)
-        .typeText(passwordInput, validPassword)
-        .click(loginButton)
-        .click(linkedinButton)
-
-    const linkedinPage = await getURL();
-
-    await t.expect(linkedinPage).contains('https://www.linkedin.com/company/sauce-labs');
+    await loginPage.typeUserName(validUserName);
+    await loginPage.typePassword(validPassword);
+    await loginPage.clickOnLoginBttn();
+    await productsPage.goToLinkedIn();
+    await t.expect(linkedInUrl).eql('https://www.linkedin.com/company/sauce-labs');
 });

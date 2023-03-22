@@ -1,10 +1,9 @@
 import { Selector, t, ClientFunction }  from "testcafe";
 
-import { baseUrl, loginButton, validUserName, validPassword, 
+import { loginButton, validUserName, validPassword, 
         userNameInput, passwordInput,
-        productSortDrop, sortProductAZ, productContainer,
-        firstItemSlot, productTitle, firstProductAZ } from "./login.js";
-
+        productSortDrop, sortProductAZ, productTitle } from "./login.js";
+const baseUrl = 'https://www.saucedemo.com/';
 
 fixture`Verify sorting options`
     .page(baseUrl)

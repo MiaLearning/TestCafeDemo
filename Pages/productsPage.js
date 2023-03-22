@@ -15,8 +15,16 @@ class ProductsPage {
         this.sortPriceHL = Selector("option[value='hilo']");
         this.shoppingCartBttn = Selector("#shopping_cart_container");
         this.cartCount = Selector(".shopping_cart_badge");
-        this.addToCartBttn = Selector("a[id^='add-to-cart']");
-        this.removeFromCartBttn = Selector("a[id^='remove']");
+        this.addToCartBttn = Selector("[id^='add-to-cart']");
+        this.removeFromCartBttn = Selector("[id^='remove']");
+        this.linkedInBttn = Selector(".social_linkedin");
+        this.facebookBttn =  Selector(".social_facebook ");
+        this.twitterBttn = Selector(".social_twitter");
+        this.inventoryItem = Selector(".inventory_item");
+        this.productTitle = Selector(".inventory_item_name");
+        this.productDescription = Selector("inventory_item_label");
+        this.productPrice = Selector(".inventory_item_price");
+        this.backpackTitle = Selector("#item_4_title_link");
     }
 
     async openBurgerMenu () {
@@ -67,12 +75,36 @@ class ProductsPage {
         await t.click(this.shoppingCartBttn);
     }
 
-    async addProductToCart () {
-        await t.click(this.addToCartBttn);
-    }
-
     async removeProductFromCart () {
         await t.click(this.removeFromCartBttn);
+    }
+  
+    async goToLinkedIn() {
+        await t.click(this.linkedInBttn);
+    }
+
+    async goToFacebook() {
+        await t.click(this.facebookBttn);
+    }
+
+    async goToTwitter() {
+        await t.click(this.twitterBttn);
+    }
+
+    async addProductToCart(index) {
+        await t.click(this.addToCartBttn.nth(index));
+    }
+
+    async removeProductFromPage() {
+        await t.click(this.removeFromCartBttn);
+    }
+
+    async clickOnProduct(index) {
+        await t.click(this.productTitle.nth(index));
+    }
+
+    async clickOnBackpack() {
+        await t.click(this.backpackTitle);
     }
 }
 

@@ -4,7 +4,8 @@ class ShoppingCartPage {
     constructor () {
         this.continueShoppingBttn = Selector("#continue-shopping");
         this.checkoutBttn = Selector("#checkout");
-        this.removeBttn = Selector("#remove");
+        this.removeBttnSauceBkp = Selector("#remove-sauce-labs-backpack");
+        this.cartListProdNo = Selector(".cart_quantity");
     }
 
     async returnToHomepage () {
@@ -15,8 +16,8 @@ class ShoppingCartPage {
         await t.click(this.checkoutBttn)
     }
 
-    async removeProductFromCart () {
-        await t.click(this.removeBttn)
+    async removeSauceBkpFromCart () {
+        await t.click(this.removeBttnSauceBkp)
     }
 }
 

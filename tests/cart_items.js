@@ -1,86 +1,112 @@
 import { Selector, t, ClientFunction } from "testcafe";
+import loginPage from "../Pages/loginPage.js";
+import productDetailsPage from "../Pages/productDetailsPage.js";
+import productsPage from "../Pages/productsPage.js";
+import shoppingCartPage from "../Pages/shoppingCartPage.js";
 
-import { baseUrl, loginButton, validUserName, validPassword,
-        userNameInput, passwordInput, } from "./login.js";
-const firstProductAddToCart = Selector('#add-to-cart-sauce-labs-backpack');
-const firstProductRemoveFromCart = Selector("#remove-sauce-labs-backpack");
-const secondProductAddToCart = Selector('#add-to-cart-sauce-labs-bike-light');
-const secondProductRemoveFromCart = Selector('#remove-sauce-labs-bike-light');
-const shoppingCartCount = Selector('.shopping_cart_badge');
-const shoppingCartButton = Selector('.shopping_cart_link');
-const cartItem = Selector('.cart_item');
-const cartQuantity = Selector('.cart_quantity');
-const removeButton = Selector('.btn_secondary');
-const addButton = Selector('.btn_primary');
+const validUserName = 'standard_user';
+const validPassword = 'secret_sauce';
+const baseUrl = 'https://www.saucedemo.com/';
+const randomIndex = Math.floor(Math.random() * 6);
+const productDetailsPageUrl = 'https://www.saucedemo.com/inventory-item.html?id=';
 
 
 fixture`Add product to cart`
     .page(baseUrl)
 
 
-test(`Add one item to cart`, async t => {
-    await t
-        .typeText(userNameInput, validUserName)
-        .typeText(passwordInput, validPassword)
-        .click(loginButton)
-        .click(firstProductAddToCart)
-
-    const cartNumber = await shoppingCartCount.innerText;
-
-    await t.expect(cartNumber).eql('1');
+test(`Add first item to cart`, async t => {
+    await loginPage.typeUserName(validUserName);
+    await loginPage.typePassword(validPassword);
+    await loginPage.clickOnLoginBttn();
+    await productsPage.addProductToCart(0);
+    await t.expect(productsPage.cartCount.innerText).eql('1');
 });
 
 
 test(`Remove product from cart`, async t => {
-    await t
-        .typeText(userNameInput, validUserName)
-        .typeText(passwordInput, validPassword)
-        .click(loginButton)
-        .click(firstProductAddToCart)
-        .click(shoppingCartButton)
-        .click(firstProductRemoveFromCart)
-
-    const isCartItemVisible = await cartItem.visible;
-    const isProductInCart = await shoppingCartCount.exists;
-
-    await t.expect(isCartItemVisible).eql(false)
-    await t.expect(isProductInCart).eql(false)
+    await loginPage.typeUserName(validUserName);
+    await loginPage.typePassword(validPassword);
+    await loginPage.clickOnLoginBttn();
+    await productsPage.addProductToCart(0);
+    await productsPage.goToCart();
+    await shoppingCartPage.removeSauceBkpFromCart();
+    await t.expect(productsPage.cartCount.visible).eql(false);
 });
 
 
 test(`Add two products to cart and remove one`, async t => {
-    await t 
-         .typeText(userNameInput, validUserName)
-         .typeText(passwordInput, validPassword)
-         .click(loginButton)
-         .click(firstProductAddToCart)
-         .click(secondProductAddToCart)
-         .click(shoppingCartButton)
-         .click(secondProductRemoveFromCart)
-
-    const cartNumber = await shoppingCartCount.innerText;
-    const cartListProductNo = await cartQuantity.innerText;
-
-    await t.expect(cartNumber).eql('1');
-    await t.expect(cartListProductNo).eql('1'); 
+    await loginPage.typeUserName(validUserName);
+    await loginPage.typePassword(validPassword);
+    await loginPage.clickOnLoginBttn();
+    await productsPage.addProductToCart(0);
+    await productsPage.addProductToCart(0);
+    await productsPage.goToCart();
+    await shoppingCartPage.removeSauceBkpFromCart();
+    await t.expect(productsPage.cartCount.innerText).eql('1');
+    await t.expect(shoppingCartPage.cartListProdNo.count).eql(1);
 });
 
 
 test(`Randomize picked product, add to cart, remove from cart`, async t => {
-    await t
-        .typeText(userNameInput, validUserName)
-        .typeText(passwordInput, validPassword)
-        .click(loginButton)
+    await loginPage.typeUserName(validUserName);
+    await loginPage.typePassword(validPassword);
+    await loginPage.clickOnLoginBttn();
+    await productsPage.addProductToCart(randomIndex);
+    await productsPage.goToCart();
+    await t.expect(productsPage.cartCount.innerText).eql('1');
+    await productsPage.removeProductFromCart();
+    await t.expect(productsPage.cartCount.visible).eql(false);
+    await t.expect(shoppingCartPage.cartListProdNo.visible).eql(false);
+    /*
+    1) extra test:  adaugi in cart din product page si verific ca contine acelasi nume in soppingcart. 
+    2) Name, descr, + price, conincide productpage to personal product page
+    3) Sa faci remvove la produs din cart, din homepage. */
+}); 
 
-        const randomIndex = Math.floor(Math.random() * 6);
-        const addToCart = addButton.nth(randomIndex);
 
-     await t 
-        .click(addToCart)
-        .click(shoppingCartButton)
-        .click(removeButton)
-            
-    const firstCartItem = cartItem.nth(0);
+/*test(`Cart product displays the title from detail page`, async t => {
+    await t.setTestSpeed(0.8)
+    await loginPage.typeUserName(validUserName);
+    await loginPage.typePassword(validPassword);
+    await loginPage.clickOnLoginBttn();
+    await productsPage.clickOnProduct(randomIndex); 
+    //await t.expect(productDetailsPageUrl).eql('https://www.saucedemo.com/inventory-item.html?id=');
+    await productDetailsPage.prodDetailsToCart();
+    await productsPage.goToCart();
+    const cartProductTitle = (productDetailsPage.prodDetailsTitle.withText);
+    const expectProductTitle = productsPage.productTitle;
+    await t.expect(cartProductTitle).eql(expectProductTitle);
+});*/
 
-    await t.expect(firstCartItem.exists).notOk();
+
+test(`Remove a cart product from Homepage`, async t => {   
+    await loginPage.typeUserName(validUserName);
+    await loginPage.typePassword(validPassword);
+    await loginPage.clickOnLoginBttn();
+    await productsPage.clickOnProduct(randomIndex);
+    await productDetailsPage.prodDetailsToCart();
+    await productsPage.goToCart();
+    await t.expect(productsPage.cartCount.innerText).eql('1');
+    await shoppingCartPage.returnToHomepage();
+    await t.expect(productsPage.inventoryItem.exists).eql(true);
+    await productsPage.removeProductFromPage();
+    await t.expect(productsPage.cartCount.visible).eql(false);     
 });
+
+
+test.only(`Verify if product attributes(description, title, price) match productDetails with Homepage`, async t => {
+    await t.setTestSpeed(0.8);
+    await loginPage.typeUserName(validUserName);
+    await loginPage.typePassword(validPassword);
+    await loginPage.clickOnLoginBttn();
+    await productsPage.clickOnBackpack();
+    await t.expect(productDetailsPage.prodDetailsbackpackTitle.innerText).eql('Sauce Labs Backpack');
+    await t.expect(productDetailsPage.prodDetailsbackpackDesc.innerText).eql('carry.allTheThings() with the sleek, streamlined Sly Pack that melds uncompromising style with unequaled laptop and tablet protection.');
+    await t.expect(productDetailsPage.prodDetailsbackpackPrice.innerText).eql('$29.99');
+    //await t.expect(productDetailsPage.prodDetailsbackpackImg).eql('sauce-backpack'); SRC attribute?
+    //modify test : capture product attributes from Homepage and compare with product attributes ProducDrtailsPage / Modify test title, can add picture to the test. Picture selector modify into capture for class and not source. GetAttributeValue 
+});
+
+
+
