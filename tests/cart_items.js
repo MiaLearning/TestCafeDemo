@@ -85,7 +85,7 @@ test(`Remove a cart product from Homepage`, async t => {
     await loginPage.typePassword(validPassword);
     await loginPage.clickOnLoginBttn();
     await productsPage.clickOnProduct(randomIndex);
-    await productDetailsPage.prodDetailsToCart();
+    await productDetailsPage.addItemToCart();
     await productsPage.goToCart();
     await t.expect(productsPage.cartCount.innerText).eql('1');
     await shoppingCartPage.returnToHomepage();
@@ -104,9 +104,9 @@ test.only(`Verify if product attributes(description, title, price) match product
     //mereu sa ai un pct de comparatie. "
     // sa adaugi passi de comparatie in teste. (pcte de referinta in test)
     await productsPage.clickOnBackpack();
-    await t.expect(productDetailsPage.prodDetailsbackpackTitle.innerText).eql('Sauce Labs Backpack');
-    await t.expect(productDetailsPage.prodDetailsbackpackDesc.innerText).eql('carry.allTheThings() with the sleek, streamlined Sly Pack that melds uncompromising style with unequaled laptop and tablet protection.');
-    await t.expect(productDetailsPage.prodDetailsbackpackPrice.innerText).eql('$29.99');
+    await t.expect(productDetailsPage.prodTitle.innerText).eql('Sauce Labs Backpack');
+    await t.expect(productDetailsPage.detailedDescr.innerText).eql('carry.allTheThings() with the sleek, streamlined Sly Pack that melds uncompromising style with unequaled laptop and tablet protection.');
+    await t.expect(productDetailsPage.detailedPrice.innerText).eql('$29.99');
     //await t.expect(productDetailsPage.prodDetailsbackpackImg).eql('sauce-backpack'); SRC attribute?
     //modify test : capture product attributes from Homepage and compare with product attributes ProducDrtailsPage / Modify test title, can add picture to the test. Picture selector modify into capture for class and not source. GetAttributeValue 
 });
