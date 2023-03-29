@@ -12,12 +12,7 @@ class ProductDetailsPage {
 
     async addItemToCart() {
         await t.click(this.addToCart);
-    }
-
-    async goToProductDetails(index) {
-        await t.click(this.prodDetailsTitle.nth(index));
-    }
-}
+    }};
 
 export default new ProductDetailsPage();
 

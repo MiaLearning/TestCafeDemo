@@ -27,6 +27,7 @@ class ProductsPage {
         this.backpackTitle = Selector("#item_4_title_link");
     }
 
+
     async openBurgerMenu () {
         await t.click(this.burgerMenu);
     }
@@ -105,8 +106,7 @@ class ProductsPage {
 
     async clickOnBackpack() {
         await t.click(this.backpackTitle);
-    }
-}
+    }}
 
 export default new ProductsPage();
 
