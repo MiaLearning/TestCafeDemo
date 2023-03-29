@@ -100,6 +100,9 @@ test.only(`Verify if product attributes(description, title, price) match product
     await loginPage.typeUserName(validUserName);
     await loginPage.typePassword(validPassword);
     await loginPage.clickOnLoginBttn();
+    // Care e situatia acum? " pas de citit titlu, descriere, pret
+    //mereu sa ai un pct de comparatie. "
+    // sa adaugi passi de comparatie in teste. (pcte de referinta in test)
     await productsPage.clickOnBackpack();
     await t.expect(productDetailsPage.prodDetailsbackpackTitle.innerText).eql('Sauce Labs Backpack');
     await t.expect(productDetailsPage.prodDetailsbackpackDesc.innerText).eql('carry.allTheThings() with the sleek, streamlined Sly Pack that melds uncompromising style with unequaled laptop and tablet protection.');
@@ -108,5 +111,14 @@ test.only(`Verify if product attributes(description, title, price) match product
     //modify test : capture product attributes from Homepage and compare with product attributes ProducDrtailsPage / Modify test title, can add picture to the test. Picture selector modify into capture for class and not source. GetAttributeValue 
 });
 
-
-
+//pass cu pas - pui cimments la inceput de test 
+//cum termini, stergi comments. 
+//concentrezi la urm pas si unde esti acum. 
+// Focus : a intelege lucrurile pe care le scrii si sa nu ma concentrez sa termin testul.
+// Sa intelegi tot ce se intampla, acel randomIndex, sau cum ai putea sa-l scrii altfel, sau orice folosesti
+// SA fi analitica si sa ma gandesc in mai multe directii.
+// Sa incerci sa rezolvi un test in mai multe moduri.
+// Sa retii cu ce lucrezi momentan. 
+// cum sa construiesti si selectori mai complicati in testcafe: find / nth / withText/ withinText/ 
+//pasi specifici in TC. 
+//un extra pas: care e situatia acum?"
