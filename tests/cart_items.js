@@ -60,9 +60,7 @@ test(`Randomize picked product, add to cart, remove from cart`, async t => {
     await t.expect(productsPage.cartCount.visible).eql(false);
     await t.expect(shoppingCartPage.cartListProdNo.visible).eql(false);
     /*
-    1) extra test:  adaugi in cart din product page si verific ca contine acelasi nume in soppingcart. 
-    2) Name, descr, + price, conincide productpage to personal product page
-    3) Sa faci remvove la produs din cart, din homepage. */
+    2) Name, descr, + price, conincide productpage to personal product page*/
 }); 
 
 
