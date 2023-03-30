@@ -15,7 +15,7 @@ fixture`Add product to cart`
     .page(baseUrl)
 
 
-test.only(`Add first item to cart`, async t => {
+test(`Add first item to cart`, async t => {
     await loginPage.typeUserName(validUserName);
     await loginPage.typePassword(validPassword);
     await loginPage.clickOnLoginBttn();
@@ -66,19 +66,21 @@ test(`Randomize picked product, add to cart, remove from cart`, async t => {
 }); 
 
 
-/*test(`Cart product displays the title from detail page`, async t => {
+test.only(`Cart product displays the title from detail page`, async t => {
     await t.setTestSpeed(0.8)
     await loginPage.typeUserName(validUserName);
     await loginPage.typePassword(validPassword);
     await loginPage.clickOnLoginBttn();
     await productsPage.clickOnProduct(randomIndex); 
-    //await t.expect(productDetailsPageUrl).eql('https://www.saucedemo.com/inventory-item.html?id=');
-    await productDetailsPage.prodDetailsToCart();
+    await productDetailsPage.addItemToCart();
+    await t.expect(productsPage.cartCount.innerText).eql('1');
     await productsPage.goToCart();
-    const cartProductTitle = (productDetailsPage.prodDetailsTitle.withText);
-    const expectProductTitle = productsPage.productTitle;
+    const cartProductTitle = await productDetailsPage.prodTitle.textContent;
+    //console.log('Cart product title:', cartProductTitle);
+    const expectProductTitle = await productsPage.productTitle.textContent;
+    //console.log('Expected product title:', expectProductTitle);
     await t.expect(cartProductTitle).eql(expectProductTitle);
-});*/
+});
 
 
 test(`Remove a cart product from Homepage`, async t => {   
