@@ -15,12 +15,13 @@ fixture`Add product to cart`
     .page(baseUrl)
 
 
-test(`Add first item to cart`, async t => {
+test.only(`Add first item to cart`, async t => {
     await loginPage.typeUserName(validUserName);
     await loginPage.typePassword(validPassword);
     await loginPage.clickOnLoginBttn();
     await productsPage.addProductToCart(0);
     await t.expect(productsPage.cartCount.innerText).eql('1');
+    await t.expect(shoppingCartPage.cartListProdNo.exists).eql(false);
 });
 
 
@@ -95,7 +96,7 @@ test(`Remove a cart product from Homepage`, async t => {
 });
 
 
-test.only(`Verify if product attributes(description, title, price) match productDetails with Homepage`, async t => {
+test(`Verify if product attributes(description, title, price) match productDetails with Homepage`, async t => {
     await t.setTestSpeed(0.8);
     await loginPage.typeUserName(validUserName);
     await loginPage.typePassword(validPassword);
