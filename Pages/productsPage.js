@@ -22,7 +22,7 @@ class ProductsPage {
         this.twitterBttn = Selector(".social_twitter");
         this.inventoryItem = Selector(".inventory_item");
         this.productTitle = Selector(".inventory_item_name");
-        this.productDescription = Selector("inventory_item_label");
+        this.productDescription = Selector(".inventory_item_label");
         this.productPrice = Selector(".inventory_item_price");
         this.backpackTitle = Selector("#item_4_title_link");
     }
