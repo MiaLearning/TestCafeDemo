@@ -102,11 +102,7 @@ class ProductsPage {
 
     async clickOnProduct(index) {
         await t.click(this.productTitle.nth(index));
-    }
-
-    async clickOnBackpack() {
-        await t.click(this.backpackTitle);
-    }}
+    }};
 
 export default new ProductsPage();
 
