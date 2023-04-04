@@ -12,3 +12,22 @@
 - TestCafe docs: https://testcafe.io/documentation/402665/reference/test-api/testcontroller
 
 - How to run tests: 'npm run test'
+
+
+
+Good to know:
+
+// Care e situatia acum? " pas de citit titlu, descriere, pret
+//mereu sa ai un pct de comparatie. "
+// sa adaugi passi de comparatie in teste. (pcte de referinta in test)
+//pass cu pas - pui cimments la inceput de test 
+//cum termini, stergi comments. 
+//concentrezi la urm pas si unde esti acum. 
+// Focus : a intelege lucrurile pe care le scrii si sa nu ma concentrez sa termin testul.
+// Sa intelegi tot ce se intampla, acel randomIndex, sau cum ai putea sa-l scrii altfel, sau orice folosesti
+// SA fi analitica si sa ma gandesc in mai multe directii.
+// Sa incerci sa rezolvi un test in mai multe moduri.
+// Sa retii cu ce lucrezi momentan. 
+// cum sa construiesti si selectori mai complicati in testcafe: find / nth / withText/ withinText/ 
+//pasi specifici in TC. 
+//un extra pas: care e situatia acum?"

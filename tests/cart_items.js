@@ -3,12 +3,17 @@ import loginPage from "../Pages/loginPage.js";
 import productDetailsPage from "../Pages/productDetailsPage.js";
 import productsPage from "../Pages/productsPage.js";
 import shoppingCartPage from "../Pages/shoppingCartPage.js";
+import checkoutPage from "../Pages/checkoutPage.js";
+import checkoutOverviewPage from "../Pages/checkoutOverviewPage.js";
 
 const validUserName = 'standard_user';
 const validPassword = 'secret_sauce';
 const baseUrl = 'https://www.saucedemo.com/';
 const randomIndex = Math.floor(Math.random() * 6);
 const productDetailsPageUrl = 'https://www.saucedemo.com/inventory-item.html?id=';
+const myFirstName = 'Mia';
+const myLastName = 'J';
+const myZipCode = '407280';
 
 
 fixture`Add product to cart`
@@ -59,24 +64,19 @@ test(`Randomize picked product, add to cart, remove from cart`, async t => {
     await productsPage.removeProductFromCart();
     await t.expect(productsPage.cartCount.visible).eql(false);
     await t.expect(shoppingCartPage.cartListProdNo.visible).eql(false);
-    /*
-    2) Name, descr, + price, conincide productpage to personal product page*/
 }); 
 
 
-test.only(`Cart product displays the title from detail page`, async t => {
-    await t.setTestSpeed(0.8)
+test(`Cart product displays the title from detail page`, async t => {
     await loginPage.typeUserName(validUserName);
     await loginPage.typePassword(validPassword);
     await loginPage.clickOnLoginBttn();
     await productsPage.clickOnProduct(randomIndex); 
     await productDetailsPage.addItemToCart();
+    const cartProductTitle = await productDetailsPage.detailedTitle.textContent;
     await t.expect(productsPage.cartCount.innerText).eql('1');
     await productsPage.goToCart();
-    const cartProductTitle = await productDetailsPage.prodTitle.textContent;
-    //console.log('Cart product title:', cartProductTitle);
     const expectProductTitle = await productsPage.productTitle.textContent;
-    //console.log('Expected product title:', expectProductTitle);
     await t.expect(cartProductTitle).eql(expectProductTitle);
 });
 
@@ -96,30 +96,47 @@ test(`Remove a cart product from Homepage`, async t => {
 });
 
 
-test(`Verify if product attributes(description, title, price) match productDetails with Homepage`, async t => {
-    await t.setTestSpeed(0.8);
+test(`Verify if product attributes match productDetails in Homepage`, async t => {
     await loginPage.typeUserName(validUserName);
     await loginPage.typePassword(validPassword);
     await loginPage.clickOnLoginBttn();
-    // Care e situatia acum? " pas de citit titlu, descriere, pret
-    //mereu sa ai un pct de comparatie. "
-    // sa adaugi passi de comparatie in teste. (pcte de referinta in test)
-    await productsPage.clickOnBackpack();
-    await t.expect(productDetailsPage.prodTitle.innerText).eql('Sauce Labs Backpack');
-    await t.expect(productDetailsPage.detailedDescr.innerText).eql('carry.allTheThings() with the sleek, streamlined Sly Pack that melds uncompromising style with unequaled laptop and tablet protection.');
-    await t.expect(productDetailsPage.detailedPrice.innerText).eql('$29.99');
-    //await t.expect(productDetailsPage.prodDetailsbackpackImg).eql('sauce-backpack'); SRC attribute?
-    //modify test : capture product attributes from Homepage and compare with product attributes ProducDrtailsPage / Modify test title, can add picture to the test. Picture selector modify into capture for class and not source. GetAttributeValue 
+    const expectProductTitle = await productsPage.productTitle.nth(randomIndex).innerText;
+    const expectedProductDescr = await productsPage.productDescription.nth(randomIndex).innerText;
+    const expectedProductPrice = await productsPage.productPrice.nth(randomIndex).innerText;
+    await productsPage.clickOnProduct(randomIndex);
+    await productDetailsPage.addItemToCart();
+    const cartProductTitle = await productDetailsPage.detailedTitle.textContent;
+    const cartProductDescr = await productDetailsPage.detailedDescr.innerText;
+    const cartProductPrice = await productDetailsPage.detailedPrice.textContent;
+    await t.expect(cartProductTitle).eql(expectProductTitle);
+    await t.expect(cartProductDescr).eql(expectedProductDescr);
+    await t.expect(cartProductPrice).eql(expectedProductPrice);
 });
 
-//pass cu pas - pui cimments la inceput de test 
-//cum termini, stergi comments. 
-//concentrezi la urm pas si unde esti acum. 
-// Focus : a intelege lucrurile pe care le scrii si sa nu ma concentrez sa termin testul.
-// Sa intelegi tot ce se intampla, acel randomIndex, sau cum ai putea sa-l scrii altfel, sau orice folosesti
-// SA fi analitica si sa ma gandesc in mai multe directii.
-// Sa incerci sa rezolvi un test in mai multe moduri.
-// Sa retii cu ce lucrezi momentan. 
-// cum sa construiesti si selectori mai complicati in testcafe: find / nth / withText/ withinText/ 
-//pasi specifici in TC. 
-//un extra pas: care e situatia acum?"
+
+test.only(`Add 2 products and verify the cart total is correct`, async t => {
+    await loginPage.typeUserName(validUserName);
+    await loginPage.typePassword(validPassword);
+    await loginPage.clickOnLoginBttn();
+    await t.setTestSpeed(0.8)
+    for (let i = 0; i < 2; i ++) {
+        await productsPage.addNewProductToCart(randomIndex);
+    };
+    await productsPage.goToCart();
+    const product1Price = await shoppingCartPage.cartPrice.nth(0).innerText;
+    console.log(product1Price)
+    const product2Price = await shoppingCartPage.cartPrice.nth(1).innerText;
+    console.log(product2Price)
+    const price1 = parseFloat(product1Price.replace('$', ''));
+    const price2 = parseFloat(product2Price.replace('$', ''));
+    const totalPrice = price1 + price2;
+    console.log(`Total price: ${totalPrice}`);
+    await shoppingCartPage.checkoutCart();
+    await checkoutPage.typeFirstName();
+    await checkoutPage.typeLastName();
+    await checkoutPage.typeZipCode();
+    await checkoutPage.goToCheckoutOverview();
+    const productTotal = await checkoutOverviewPage.cartTotal.innerText;
+    await t.expect(productTotal).eql(totalPrice);
+  });
+
