@@ -1,21 +1,14 @@
 import { Selector, t, ClientFunction }  from "testcafe";
+import loginPage from "../Pages/loginPage";
+import ProductsPage from "../Pages/productsPage.js";
 
-export const baseUrl = 'https://www.saucedemo.com/';
-export const validUserName = 'standard_user';
-export const validPassword = 'secret_sauce';
-const invalidUserName = 'locked_out_user';
+const baseUrl = 'https://www.saucedemo.com/';
+const validUserName = 'standard_user';
+const validPassword = 'secret_sauce';
+const lockedUserName = 'locked_out_user';
 const invalidPassword = 'not_so_secret_sauce';
-export const userNameInput = Selector("#user-name");
-export const passwordInput = Selector("#password");
-export const loginButton = Selector('#login-button');
-const errorContainer = Selector('.error h3');
-export const productContainer = Selector('.inventory_item');
-export const productSortDrop = Selector('div.right_component > span');
-export const sortProductAZ = Selector('option[value="az"]');
-export const firstItemSlot = Selector('.inventory_item').nth(0);
-export const productTitle = Selector('.inventory_item_name');
-export const firstProductAZ = 'Sauce Labs Backpack';
-const expectedError = 'Epic sadface: Sorry, this user has been locked out.';
+const invalidUserName = 'not_standard_user';
+const expectedErrorLockedUser = 'Epic sadface: Sorry, this user has been locked out.';
 const expectedLoginError = 'Epic sadface: Username and password do not match any user in this service';
 const getURL = ClientFunction(() => window.location.href);
 
@@ -24,57 +17,52 @@ fixture`Authentification`
     .page(baseUrl)
 
 
+test(`Loading Login Page`, async t => { 
+    await t.expect(getURL()).contains(baseUrl);
+    await t.expect(loginPage.loginBttn.exists).ok();
+});
+
+
 test(`Login with valid user`, async t => {
-    await t
-        .typeText(userNameInput, validUserName)
-        .typeText(passwordInput, validPassword)
-        .click(loginButton)
-
-    const currentPage = await getURL();
-    const isInventoryItemVisible = await firstItemSlot.visible;
-
-    await t.expect(currentPage).eql('https://www.saucedemo.com/inventory.html')
-    await t.expect(isInventoryItemVisible).eql(true)
+    await loginPage.typeUserName(validUserName);
+    await loginPage.typePassword(validPassword);
+    await loginPage.clickOnLoginBttn();
+    await t.expect(getURL()).eql('https://www.saucedemo.com/inventory.html');
+    await t.expect(ProductsPage.inventoryItem.visible).eql(true);
 });
 
 
 test(`Login with invalid user`, async t => {
-    await t
-        .typeText(userNameInput, invalidUserName)
-        .typeText(passwordInput, validPassword)
-        .click(loginButton)
-
-    const receivedError = await errorContainer.innerText;
-    const isErrorVisible = await errorContainer.visible;
-
-    await t.expect(receivedError).eql(expectedError)
-    await t.expect(isErrorVisible).eql(true)
+    await loginPage.typeUserName(invalidUserName);
+    await loginPage.typePassword(validPassword);
+    await loginPage.clickOnLoginBttn();
+    await t.expect(loginPage.errorContainer.exists).eql(true);
+    await t.expect(loginPage.errorContainer.innerText).eql(expectedLoginError);
 });
 
 
 test(`Login with invalid password`, async t => {
-    await t
-        .typeText(userNameInput, validUserName)
-        .typeText(passwordInput, invalidPassword)
-        .click(loginButton)
-    
-    const receivedError = await errorContainer.innerText;
-    const isErrorVisible = await errorContainer.visible;
-
-    await t.expect(expectedLoginError).eql(receivedError)
-    await t.expect(isErrorVisible).eql(true)
+    await loginPage.typeUserName(validUserName);
+    await loginPage.typePassword(invalidPassword);
+    await loginPage.clickOnLoginBttn();
+    await t.expect(loginPage.errorContainer.exists).eql(true);
+    await t.expect(loginPage.errorContainer.innerText).eql(expectedLoginError);
 });
 
 
 test(`Login with invalid username and password`, async t => {
-    await t
-        .typeText(userNameInput, invalidUserName)
-        .typeText(passwordInput, invalidPassword)
-        .click(loginButton)
+    await loginPage.typeUserName(invalidUserName);
+    await loginPage.typePassword(invalidPassword);
+    await loginPage.clickOnLoginBttn();
+    await t.expect(loginPage.errorContainer.exists).eql(true);
+    await t.expect(loginPage.errorContainer.innerText).eql(expectedLoginError);
+});
 
-    const receivedError = await errorContainer.innerText;
-    const isErrorVisible = await errorContainer.visible;
 
-    await t.expect(receivedError).eql(expectedLoginError)
-    await t.expect(isErrorVisible).eql(true)
+test(`Login with locked user`, async t => {
+    await loginPage.typeUserName(lockedUserName);
+    await loginPage.typePassword(validPassword);
+    await loginPage.clickOnLoginBttn();
+    await t.expect(loginPage.errorContainer.exists).eql(true);
+    await t.expect(loginPage.errorContainer.innerText).eql(expectedErrorLockedUser);
 });

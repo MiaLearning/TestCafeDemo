@@ -1,12 +1,10 @@
 import { Selector, t } from "testcafe";
+import loginPage from "../Pages/loginPage";
+import productsPage from "../Pages/productsPage";
 
 const baseUrl = 'https://www.saucedemo.com/';
 const validUserName = 'standard_user';
 const validPassword = 'secret_sauce';
-const userNameInput = Selector("#user-name");
-const passwordInput = Selector("#password");
-const loginButton = Selector('#login-button');
-const productContainer = Selector('.inventory_item');
 
 
 fixture`Tests`
@@ -14,12 +12,8 @@ fixture`Tests`
 
 
 test(`Expect page to have 6 products`, async t => {
-    await t
-        .typeText(userNameInput, validUserName)
-        .typeText(passwordInput, validPassword)
-        .click(loginButton)
-
-    const noOfProducts = await productContainer.count;
-
-    await t.expect(noOfProducts).eql(6)
+    await loginPage.typeUserName(validUserName);
+    await loginPage.typePassword(validPassword);
+    await loginPage.clickOnLoginBttn();
+    await t.expect(productsPage.inventoryItem.count).eql(6);
 });

@@ -1,86 +1,141 @@
 import { Selector, t, ClientFunction } from "testcafe";
+import loginPage from "../Pages/loginPage.js";
+import productDetailsPage from "../Pages/productDetailsPage.js";
+import productsPage from "../Pages/productsPage.js";
+import shoppingCartPage from "../Pages/shoppingCartPage.js";
+import checkoutPage from "../Pages/checkoutPage.js";
+import checkoutOverviewPage from "../Pages/checkoutOverviewPage.js";
 
-import { baseUrl, loginButton, validUserName, validPassword,
-        userNameInput, passwordInput, } from "./login.js";
-const firstProductAddToCart = Selector('#add-to-cart-sauce-labs-backpack');
-const firstProductRemoveFromCart = Selector("#remove-sauce-labs-backpack");
-const secondProductAddToCart = Selector('#add-to-cart-sauce-labs-bike-light');
-const secondProductRemoveFromCart = Selector('#remove-sauce-labs-bike-light');
-const shoppingCartCount = Selector('.shopping_cart_badge');
-const shoppingCartButton = Selector('.shopping_cart_link');
-const cartItem = Selector('.cart_item');
-const cartQuantity = Selector('.cart_quantity');
-const removeButton = Selector('.btn_secondary');
-const addButton = Selector('.btn_primary');
+const validUserName = 'standard_user';
+const validPassword = 'secret_sauce';
+const baseUrl = 'https://www.saucedemo.com/';
+const randomIndex = Math.floor(Math.random() * 6);
+const productDetailsPageUrl = 'https://www.saucedemo.com/inventory-item.html?id=';
+const myFirstName = 'Mia';
+const myLastName = 'J';
+const myZipCode = '407280';
 
 
 fixture`Add product to cart`
     .page(baseUrl)
 
 
-test(`Add one item to cart`, async t => {
-    await t
-        .typeText(userNameInput, validUserName)
-        .typeText(passwordInput, validPassword)
-        .click(loginButton)
-        .click(firstProductAddToCart)
-
-    const cartNumber = await shoppingCartCount.innerText;
-
-    await t.expect(cartNumber).eql('1');
+test(`Add first item to cart`, async t => {
+    await loginPage.typeUserName(validUserName);
+    await loginPage.typePassword(validPassword);
+    await loginPage.clickOnLoginBttn();
+    await productsPage.addProductToCart(0);
+    await t.expect(productsPage.cartCount.innerText).eql('1');
+    await t.expect(shoppingCartPage.cartListProdNo.exists).eql(false);
 });
 
 
 test(`Remove product from cart`, async t => {
-    await t
-        .typeText(userNameInput, validUserName)
-        .typeText(passwordInput, validPassword)
-        .click(loginButton)
-        .click(firstProductAddToCart)
-        .click(shoppingCartButton)
-        .click(firstProductRemoveFromCart)
-
-    const isCartItemVisible = await cartItem.visible;
-    const isProductInCart = await shoppingCartCount.exists;
-
-    await t.expect(isCartItemVisible).eql(false)
-    await t.expect(isProductInCart).eql(false)
+    await loginPage.typeUserName(validUserName);
+    await loginPage.typePassword(validPassword);
+    await loginPage.clickOnLoginBttn();
+    await productsPage.addProductToCart(0);
+    await productsPage.goToCart();
+    await shoppingCartPage.removeSauceBkpFromCart();
+    await t.expect(productsPage.cartCount.visible).eql(false);
 });
 
 
 test(`Add two products to cart and remove one`, async t => {
-    await t 
-         .typeText(userNameInput, validUserName)
-         .typeText(passwordInput, validPassword)
-         .click(loginButton)
-         .click(firstProductAddToCart)
-         .click(secondProductAddToCart)
-         .click(shoppingCartButton)
-         .click(secondProductRemoveFromCart)
-
-    const cartNumber = await shoppingCartCount.innerText;
-    const cartListProductNo = await cartQuantity.innerText;
-
-    await t.expect(cartNumber).eql('1');
-    await t.expect(cartListProductNo).eql('1'); 
+    await loginPage.typeUserName(validUserName);
+    await loginPage.typePassword(validPassword);
+    await loginPage.clickOnLoginBttn();
+    await productsPage.addProductToCart(0);
+    await productsPage.addProductToCart(0);
+    await productsPage.goToCart();
+    await shoppingCartPage.removeSauceBkpFromCart();
+    await t.expect(productsPage.cartCount.innerText).eql('1');
+    await t.expect(shoppingCartPage.cartListProdNo.count).eql(1);
 });
 
 
 test(`Randomize picked product, add to cart, remove from cart`, async t => {
-    await t
-        .typeText(userNameInput, validUserName)
-        .typeText(passwordInput, validPassword)
-        .click(loginButton)
+    await loginPage.typeUserName(validUserName);
+    await loginPage.typePassword(validPassword);
+    await loginPage.clickOnLoginBttn();
+    await productsPage.addProductToCart(randomIndex);
+    await productsPage.goToCart();
+    await t.expect(productsPage.cartCount.innerText).eql('1');
+    await productsPage.removeProductFromCart();
+    await t.expect(productsPage.cartCount.visible).eql(false);
+    await t.expect(shoppingCartPage.cartListProdNo.visible).eql(false);
+}); 
 
-        const randomIndex = Math.floor(Math.random() * 6);
-        const addToCart = addButton.nth(randomIndex);
 
-     await t 
-        .click(addToCart)
-        .click(shoppingCartButton)
-        .click(removeButton)
-            
-    const firstCartItem = cartItem.nth(0);
+test(`Cart product displays the title from detail page`, async t => {
+    await loginPage.typeUserName(validUserName);
+    await loginPage.typePassword(validPassword);
+    await loginPage.clickOnLoginBttn();
+    await productsPage.clickOnProduct(randomIndex); 
+    await productDetailsPage.addItemToCart();
+    const cartProductTitle = await productDetailsPage.detailedTitle.textContent;
+    await t.expect(productsPage.cartCount.innerText).eql('1');
+    await productsPage.goToCart();
+    const expectProductTitle = await productsPage.productTitle.textContent;
+    await t.expect(cartProductTitle).eql(expectProductTitle);
+});
 
-    await t.expect(firstCartItem.exists).notOk();
+
+test(`Remove a cart product from Homepage`, async t => {   
+    await loginPage.typeUserName(validUserName);
+    await loginPage.typePassword(validPassword);
+    await loginPage.clickOnLoginBttn();
+    await productsPage.clickOnProduct(randomIndex);
+    await productDetailsPage.addItemToCart();
+    await productsPage.goToCart();
+    await t.expect(productsPage.cartCount.innerText).eql('1');
+    await shoppingCartPage.returnToHomepage();
+    await t.expect(productsPage.inventoryItem.exists).eql(true);
+    await productsPage.removeProductFromPage();
+    await t.expect(productsPage.cartCount.visible).eql(false);     
+});
+
+
+test(`Verify if product attributes match productDetails in Homepage`, async t => {
+    await loginPage.typeUserName(validUserName);
+    await loginPage.typePassword(validPassword);
+    await loginPage.clickOnLoginBttn();
+    const expectProductTitle = await productsPage.productTitle.nth(randomIndex).innerText;
+    const expectedProductDescr = await productsPage.productDescription.nth(randomIndex).innerText;
+    const expectedProductPrice = await productsPage.productPrice.nth(randomIndex).innerText;
+    await productsPage.clickOnProduct(randomIndex);
+    await productDetailsPage.addItemToCart();
+    const cartProductTitle = await productDetailsPage.detailedTitle.textContent;
+    const cartProductDescr = await productDetailsPage.detailedDescr.innerText;
+    const cartProductPrice = await productDetailsPage.detailedPrice.textContent;
+    await t.expect(cartProductTitle).eql(expectProductTitle);
+    await t.expect(cartProductDescr).eql(expectedProductDescr);
+    await t.expect(cartProductPrice).eql(expectedProductPrice);
+});
+
+
+test(`Add 2 products and verify the cart total is correct`, async t => {
+    await loginPage.typeUserName(validUserName);
+    await loginPage.typePassword(validPassword);
+    await loginPage.clickOnLoginBttn();
+    for (let i = 0; i < 2; i ++) {
+        await productsPage.addNewProductToCart(randomIndex);
+    };
+    await productsPage.goToCart();
+    const product1Price = await shoppingCartPage.cartPrice.nth(0).innerText;
+    console.log(product1Price)
+    const product2Price = await shoppingCartPage.cartPrice.nth(1).innerText;
+    console.log(product2Price)
+    const price1 = parseFloat(product1Price.replace('$', ''));
+    const price2 = parseFloat(product2Price.replace('$', ''));
+    const totalPrice = price1 + price2;
+    console.log(`Total price: ${totalPrice}`);
+    await shoppingCartPage.checkoutCart();
+    await checkoutPage.typeFirstName(myFirstName);
+    await checkoutPage.typeLastName(myLastName);
+    await checkoutPage.typeZipCode(myZipCode);
+    await checkoutPage.goToCheckoutOverview();
+    const productTotal = await checkoutOverviewPage.cartTotal.textContent;
+    const subtotalCart = parseFloat(productTotal.replace('Item total: $', ''));
+    await t.expect(subtotalCart).eql(totalPrice);
 });
