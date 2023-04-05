@@ -10,7 +10,6 @@ class CheckoutPage {
     }
 
     async typeFirstName(myFirstName) {
-        console.log('myFirstName:', myFirstName);
         await t.typeText(this.firstNameInput, myFirstName);
     }
 

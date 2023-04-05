@@ -114,11 +114,10 @@ test(`Verify if product attributes match productDetails in Homepage`, async t =>
 });
 
 
-test.only(`Add 2 products and verify the cart total is correct`, async t => {
+test(`Add 2 products and verify the cart total is correct`, async t => {
     await loginPage.typeUserName(validUserName);
     await loginPage.typePassword(validPassword);
     await loginPage.clickOnLoginBttn();
-    await t.setTestSpeed(0.8)
     for (let i = 0; i < 2; i ++) {
         await productsPage.addNewProductToCart(randomIndex);
     };
@@ -132,11 +131,11 @@ test.only(`Add 2 products and verify the cart total is correct`, async t => {
     const totalPrice = price1 + price2;
     console.log(`Total price: ${totalPrice}`);
     await shoppingCartPage.checkoutCart();
-    await checkoutPage.typeFirstName();
-    await checkoutPage.typeLastName();
-    await checkoutPage.typeZipCode();
+    await checkoutPage.typeFirstName(myFirstName);
+    await checkoutPage.typeLastName(myLastName);
+    await checkoutPage.typeZipCode(myZipCode);
     await checkoutPage.goToCheckoutOverview();
-    const productTotal = await checkoutOverviewPage.cartTotal.innerText;
-    await t.expect(productTotal).eql(totalPrice);
-  });
-
+    const productTotal = await checkoutOverviewPage.cartTotal.textContent;
+    const subtotalCart = parseFloat(productTotal.replace('Item total: $', ''));
+    await t.expect(subtotalCart).eql(totalPrice);
+});

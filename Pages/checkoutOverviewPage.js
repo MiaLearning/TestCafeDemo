@@ -2,7 +2,7 @@ import { Selector, t } from "testcafe";
 
 class CheckoutOverviewPage {
     constructor () {
-        this.cartTotal = Selector(".summary_total_label")
+        this.cartTotal = Selector(".summary_subtotal_label")
     }
 }
 
