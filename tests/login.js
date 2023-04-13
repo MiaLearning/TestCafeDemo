@@ -1,4 +1,4 @@
-import { Selector, t, ClientFunction }  from "testcafe";
+import { Selector, t, ClientFunction } from "testcafe";
 import loginPage from "../Pages/loginPage";
 import ProductsPage from "../Pages/productsPage.js";
 
