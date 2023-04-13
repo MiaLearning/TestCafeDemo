@@ -36,7 +36,7 @@ test(`Remove product from cart`, async t => {
     await loginPage.clickOnLoginBttn();
     await productsPage.addProductToCart(0);
     await productsPage.goToCart();
-    await shoppingCartPage.removeSauceBkpFromCart();
+    await productsPage.removeProductFromPage();
     await t.expect(productsPage.cartCount.visible).eql(false);
 });
 
@@ -48,7 +48,7 @@ test(`Add two products to cart and remove one`, async t => {
     await productsPage.addProductToCart(0);
     await productsPage.addProductToCart(0);
     await productsPage.goToCart();
-    await shoppingCartPage.removeSauceBkpFromCart();
+    await productsPage.removeProductFromPage();
     await t.expect(productsPage.cartCount.innerText).eql('1');
     await t.expect(shoppingCartPage.cartListProdNo.count).eql(1);
 });
