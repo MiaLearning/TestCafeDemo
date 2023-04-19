@@ -19,7 +19,6 @@ class LoginPage {
 
     async clickOnLoginBttn() {
         await t.click(this.loginBttn);
-    }
-}
+    }};
 
 export default new LoginPage();

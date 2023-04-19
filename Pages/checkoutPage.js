@@ -27,7 +27,6 @@ class CheckoutPage {
 
     async returnToCartPage() {
         await t.click(this.cancelBttn);
-    }
-}
+    }};
 
 export default new CheckoutPage();

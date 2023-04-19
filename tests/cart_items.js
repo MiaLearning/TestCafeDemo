@@ -1,4 +1,3 @@
-import { Selector, t, ClientFunction } from "testcafe";
 import loginPage from "../Pages/loginPage.js";
 import productDetailsPage from "../Pages/productDetailsPage.js";
 import productsPage from "../Pages/productsPage.js";
@@ -10,7 +9,6 @@ const validUserName = 'standard_user';
 const validPassword = 'secret_sauce';
 const baseUrl = 'https://www.saucedemo.com/';
 const randomIndex = Math.floor(Math.random() * 6);
-const productDetailsPageUrl = 'https://www.saucedemo.com/inventory-item.html?id=';
 const myFirstName = 'Mia';
 const myLastName = 'J';
 const myZipCode = '407280';
@@ -123,13 +121,10 @@ test(`Add 2 products and verify the cart total is correct`, async t => {
     };
     await productsPage.goToCart();
     const product1Price = await shoppingCartPage.cartPrice.nth(0).innerText;
-    console.log(product1Price)
     const product2Price = await shoppingCartPage.cartPrice.nth(1).innerText;
-    console.log(product2Price)
     const price1 = parseFloat(product1Price.replace('$', ''));
     const price2 = parseFloat(product2Price.replace('$', ''));
     const totalPrice = price1 + price2;
-    console.log(`Total price: ${totalPrice}`);
     await shoppingCartPage.checkoutCart();
     await checkoutPage.typeFirstName(myFirstName);
     await checkoutPage.typeLastName(myLastName);

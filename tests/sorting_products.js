@@ -18,12 +18,5 @@ test.skip(`Sort products by Name (A to Z)`, async t => {
         .click(sortProductAZ)
 
     var productList = String(productTitle)
-    console.log(productList)
-
 }); 
     
-    /*var array = new Array();
-    for (i=0; i < productList.length; i++) {
-        array.push(productList[i]);
-    }
-   console.log(productList) */
