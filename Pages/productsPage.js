@@ -21,7 +21,7 @@ class ProductsPage {
         this.facebookBttn =  Selector(".social_facebook ");
         this.twitterBttn = Selector(".social_twitter");
         this.inventoryItem = Selector(".inventory_item");
-        this.productTitle = Selector(".inventory_item_name");
+        this.productTitle = Selector('.inventory_item_name');
         this.productDescription = Selector(".inventory_item_desc");
         this.productPrice = Selector(".inventory_item_price");
     }
