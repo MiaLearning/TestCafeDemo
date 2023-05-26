@@ -105,7 +105,21 @@ class ProductsPage {
 
     async clickOnProduct(index) {
         await t.click(this.productTitle.nth(index));
-    }};
+    }
+
+    async getProductTitles() {
+        const count = await this.productTitle.count;
+        const productTitles = [];
+      
+        for (let i = 0; i < count; i++) {
+          const title = await this.productTitle.nth(i).innerText;
+          console.log(`Title ${i}: ${title}`);
+          productTitles.push(title);
+        }
+      
+        return productTitles;
+    }
+};
 
 export default new ProductsPage();
 

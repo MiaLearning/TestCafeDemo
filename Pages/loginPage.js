@@ -19,6 +19,13 @@ class LoginPage {
 
     async clickOnLoginBttn() {
         await t.click(this.loginBttn);
+    }
+
+  async signIn(user) {
+        await t
+            .typeText(this.userNameInput, user.username)
+            .typeText(this.passwordInput, user.password)
+            .click(this.loginBttn);
     }};
 
 export default new LoginPage();

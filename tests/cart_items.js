@@ -4,9 +4,8 @@ import productsPage from "../Pages/productsPage.js";
 import shoppingCartPage from "../Pages/shoppingCartPage.js";
 import checkoutPage from "../Pages/checkoutPage.js";
 import checkoutOverviewPage from "../Pages/checkoutOverviewPage.js";
+import { validUser } from "../Pages/users.js";
 
-const validUserName = 'standard_user';
-const validPassword = 'secret_sauce';
 const baseUrl = 'https://www.saucedemo.com/';
 const randomIndex = Math.floor(Math.random() * 6);
 const myFirstName = 'Mia';
@@ -19,9 +18,7 @@ fixture`Add product to cart`
 
 
 test(`Add first item to cart`, async t => {
-    await loginPage.typeUserName(validUserName);
-    await loginPage.typePassword(validPassword);
-    await loginPage.clickOnLoginBttn();
+    await loginPage.signIn(validUser);
     await productsPage.addProductToCart(0);
     await t.expect(productsPage.cartCount.innerText).eql('1');
     await t.expect(shoppingCartPage.cartListProdNo.exists).eql(false);
@@ -29,9 +26,7 @@ test(`Add first item to cart`, async t => {
 
 
 test(`Remove product from cart`, async t => {
-    await loginPage.typeUserName(validUserName);
-    await loginPage.typePassword(validPassword);
-    await loginPage.clickOnLoginBttn();
+    await loginPage.signIn(validUser);
     await productsPage.addProductToCart(0);
     await productsPage.goToCart();
     await productsPage.removeProductFromPage();
@@ -40,9 +35,7 @@ test(`Remove product from cart`, async t => {
 
 
 test(`Add two products to cart and remove one`, async t => {
-    await loginPage.typeUserName(validUserName);
-    await loginPage.typePassword(validPassword);
-    await loginPage.clickOnLoginBttn();
+    await loginPage.signIn(validUser);
     await productsPage.addProductToCart(0);
     await productsPage.addProductToCart(0);
     await productsPage.goToCart();
@@ -53,9 +46,7 @@ test(`Add two products to cart and remove one`, async t => {
 
 
 test(`Randomize picked product, add to cart, remove from cart`, async t => {
-    await loginPage.typeUserName(validUserName);
-    await loginPage.typePassword(validPassword);
-    await loginPage.clickOnLoginBttn();
+    await loginPage.signIn(validUser);
     await productsPage.addProductToCart(randomIndex);
     await productsPage.goToCart();
     await t.expect(productsPage.cartCount.innerText).eql('1');
@@ -66,9 +57,7 @@ test(`Randomize picked product, add to cart, remove from cart`, async t => {
 
 
 test(`Cart product displays the title from detail page`, async t => {
-    await loginPage.typeUserName(validUserName);
-    await loginPage.typePassword(validPassword);
-    await loginPage.clickOnLoginBttn();
+    await loginPage.signIn(validUser);
     await productsPage.clickOnProduct(randomIndex); 
     await productDetailsPage.addItemToCart();
     const cartProductTitle = await productDetailsPage.detailedTitle.textContent;
@@ -80,9 +69,7 @@ test(`Cart product displays the title from detail page`, async t => {
 
 
 test(`Remove a cart product from Homepage`, async t => {   
-    await loginPage.typeUserName(validUserName);
-    await loginPage.typePassword(validPassword);
-    await loginPage.clickOnLoginBttn();
+    await loginPage.signIn(validUser);
     await productsPage.clickOnProduct(randomIndex);
     await productDetailsPage.addItemToCart();
     await productsPage.goToCart();
@@ -95,9 +82,7 @@ test(`Remove a cart product from Homepage`, async t => {
 
 
 test(`Verify if product attributes match productDetails in Homepage`, async t => {
-    await loginPage.typeUserName(validUserName);
-    await loginPage.typePassword(validPassword);
-    await loginPage.clickOnLoginBttn();
+    await loginPage.signIn(validUser);
     const expectProductTitle = await productsPage.productTitle.nth(randomIndex).innerText;
     const expectedProductDescr = await productsPage.productDescription.nth(randomIndex).innerText;
     const expectedProductPrice = await productsPage.productPrice.nth(randomIndex).innerText;
@@ -113,9 +98,7 @@ test(`Verify if product attributes match productDetails in Homepage`, async t =>
 
 
 test(`Add 2 products and verify the cart total is correct`, async t => {
-    await loginPage.typeUserName(validUserName);
-    await loginPage.typePassword(validPassword);
-    await loginPage.clickOnLoginBttn();
+    await loginPage.signIn(validUser);
     for (let i = 0; i < 2; i ++) {
         await productsPage.addNewProductToCart(randomIndex);
     };

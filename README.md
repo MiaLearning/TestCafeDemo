@@ -13,6 +13,8 @@
 
 - How to run tests: 'npm run test'
 
+- After git push , BIG GREEN BUTTIN 
+
 
 
 Good to know:

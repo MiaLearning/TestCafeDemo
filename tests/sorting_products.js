@@ -1,76 +1,45 @@
 import loginPage from "../Pages/loginPage.js";
 import productsPage from "../Pages/productsPage.js";
-const validUserName = 'standard_user';
-const validPassword = 'secret_sauce';
+import { validUser } from "../Pages/users.js";
 const baseUrl = 'https://www.saucedemo.com/';
 
 
 fixture`Verify sorting options`
     .page(baseUrl)
 
-  //MAKES SENSE: (A TO Z, Z to A, si preturi) sort simplu, click pe optin, luat lista, comparat liste.
     
-test(`Sort products by Name (A to Z)`, async t => { 
-    await loginPage.typeUserName(validUserName);
-    await loginPage.typePassword(validPassword);
-    await loginPage.clickOnLoginBttn();
-  
-    const productTitleElements = await productsPage.productTitle;
-    const productTitles = [];
-  
-    for (let i = 0; i < await productTitleElements.count; i++) {
-      const title = await productTitleElements.nth(i).innerText;
-      console.log(`Title ${i}: ${title}`);
-      productTitles.push(title);
-    }
-  
-    console.log('Product titles: ', productTitles);
+test(`Sort products by Name (A to Z)`, async (t) => {
+  await loginPage.signIn(validUser);
 
-    await productsPage.openSortDrop();
-    await productsPage.sortByDescending();
-    await productsPage.openSortDrop();
-    await productsPage.sortByAscending();
-    
-    const sortedProductTitleElements = await productsPage.productTitle;
-    const sortedTitles = [];
-    
-    for (let i = 0; i < await sortedProductTitleElements.count; i++) {
-      const title = await sortedProductTitleElements.nth(i).innerText;
-      console.log(`Sorted Title ${i}: ${title}`);
-      sortedTitles.push(title);
-    }
-    
-    await t.expect(productTitles).eql(sortedTitles);
-    console.log('Sorted product titles:', sortedTitles);
-  });
+  const initialTitles = await productsPage.getProductTitles(); 
+
+  await productsPage.openSortDrop();
+  await productsPage.sortByAscending();
+
+  const copyTitles = [...initialTitles];
+  const ascendingTitles = copyTitles.sort();
+
+  await t.expect(initialTitles).eql(ascendingTitles);
+});
+
 
 test(`Sort products by Name (Z to A)`, async t => { 
-    await loginPage.typeUserName(validUserName);
-    await loginPage.typePassword(validPassword);
-    await loginPage.clickOnLoginBttn();
+    await loginPage.signIn(validUser);
   
-    const productTitleElem = await productsPage.productTitle;
-    const productTitleDef = [];
-  
-    for (let i = 0; i < await productTitleElem.count; i++) {
-      const titles = await productTitleElem.nth(i).innerText;
-      console.log(`Title ${i}: ${titles}`);
-      productTitleDef.push(titles);
-    }
-    console.log('Product titles: ', productTitleDef);
+    const myInitialTitles = await productsPage.getProductTitles();
+    const sortedInitial = myInitialTitles.sort();
+    const reversed = sortedInitial.reverse();
 
     await productsPage.openSortDrop();
     await productsPage.sortByDescending();
+
+    const myDesTitles = await productsPage.getProductTitles();
     
-    const descendingTitles = await productsPage.productTitle;
-    const sortedDescTitles = [];
-    
-    for (let i = 0; i < await descendingTitles.count; i++) {
-      const titleDescList = await descendingTitles.nth(i).innerText;
-      console.log(`Sorted Title ${i}: ${titleDescList}`);
-      sortedDescTitles.push(titleDescList);
-    }
-    
-    await t.expect(productTitleDef).notEql(sortedDescTitles);
-    console.log('Sorted product titles:', sortedDescTitles);
-  });
+    await t.expect(reversed).eql(myDesTitles);
+  }); 
+
+  //Next: price sorting. 
+  //citeste atributel la selector. nu trebuie sa folosesti await inainte de this. 
+  //cand ceri atribute atunci aceleas sunt functii asincron si trebuie sa folosesti await 
+  //sa intelegi cu ce date lucrezi. Nu poti folosi find pe un nr,
+  // mai fa niste edabit 
