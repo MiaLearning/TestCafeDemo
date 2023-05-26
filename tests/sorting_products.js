@@ -12,14 +12,14 @@ test(`Sort products by Name (A to Z)`, async (t) => {
   await loginPage.signIn(validUser);
 
   const initialTitles = await productsPage.getProductTitles(); 
+  const copyTitles = [...initialTitles].sort();
 
   await productsPage.openSortDrop();
   await productsPage.sortByAscending();
 
-  const copyTitles = [...initialTitles];
-  const ascendingTitles = copyTitles.sort();
+  const ascendingTitles = await productsPage.getProductTitles();
 
-  await t.expect(initialTitles).eql(ascendingTitles);
+  await t.expect(copyTitles).eql(ascendingTitles);
 });
 
 
@@ -27,19 +27,42 @@ test(`Sort products by Name (Z to A)`, async t => {
     await loginPage.signIn(validUser);
   
     const myInitialTitles = await productsPage.getProductTitles();
-    const sortedInitial = myInitialTitles.sort();
-    const reversed = sortedInitial.reverse();
+    const sortedInitial = myInitialTitles.sort().reverse();
 
     await productsPage.openSortDrop();
     await productsPage.sortByDescending();
 
     const myDesTitles = await productsPage.getProductTitles();
     
-    await t.expect(reversed).eql(myDesTitles);
+    await t.expect(sortedInitial).eql(myDesTitles);
   }); 
 
-  //Next: price sorting. 
-  //citeste atributel la selector. nu trebuie sa folosesti await inainte de this. 
-  //cand ceri atribute atunci aceleas sunt functii asincron si trebuie sa folosesti await 
-  //sa intelegi cu ce date lucrezi. Nu poti folosi find pe un nr,
-  // mai fa niste edabit 
+
+test(`Sort products by Price (Low to High)`, async t => {
+  await loginPage.signIn(validUser);
+
+  const pricesList = await productsPage.getProductPrices();
+  const sortedPricesList = [...pricesList].map(price => parseFloat(price.slice(1))).sort((a, b) => a - b); 
+
+  await productsPage.openSortDrop();
+  await productsPage.sortLowPrice();
+
+  const LowHPricesList = await productsPage.getProductPrices();
+
+  await t.expect(LowHPricesList).eql(sortedPricesList.map(price => `$${price.toFixed(2)}`));
+});
+
+
+test(`Sort products by Price (High to Low)`, async t => {
+  await loginPage.signIn(validUser);
+
+  const pricesList = await productsPage.getProductPrices();
+  const sortedPricesList = [...pricesList].map(price => parseFloat(price.slice(1))).sort((a, b) => b - a);
+  
+  await productsPage.openSortDrop();
+  await productsPage.sortHighPrice();
+
+  const HighLPricesList = await productsPage.getProductPrices();
+
+  await t.expect(HighLPricesList).eql(sortedPricesList.map(price => `$${price.toFixed(2)}`));
+});

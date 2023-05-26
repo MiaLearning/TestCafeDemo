@@ -26,7 +26,6 @@ class ProductsPage {
         this.productPrice = Selector(".inventory_item_price");
     }
 
-
     async openBurgerMenu () {
         await t.click(this.burgerMenu);
     }
@@ -116,8 +115,19 @@ class ProductsPage {
           console.log(`Title ${i}: ${title}`);
           productTitles.push(title);
         }
-      
         return productTitles;
+    }
+
+    async getProductPrices() {
+        const count = await this.productPrice.count;
+        const productPrices = [];
+
+        for (let i = 0; i < count; i++) {
+            const priceTag = await this.productPrice.nth(i).innerText;
+            console.log(`Product Price ${i}: ${priceTag}`);
+            productPrices.push(priceTag);
+        }
+        return productPrices;
     }
 };
 

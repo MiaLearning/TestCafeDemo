@@ -11,6 +11,7 @@ class ProductDetailsPage {
 
     async addItemToCart() {
         await t.click(this.addToCart);
-    }};
+    }
+}
 
 export default new ProductDetailsPage();

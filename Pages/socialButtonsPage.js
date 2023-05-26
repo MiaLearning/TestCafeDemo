@@ -17,6 +17,7 @@ class SocialBttnPage {
 
     async goToTwitter() {
         await t.click(this.twitterBttn);
-    }};
+    }
+}
 
 export default new SocialBttnPage();

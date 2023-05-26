@@ -32,4 +32,3 @@ export const invalidUserPssw = {
     username: 'potato_squad',
     password: 'wrong_password'
 }
-
