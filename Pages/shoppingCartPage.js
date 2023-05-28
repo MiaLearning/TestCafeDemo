@@ -16,6 +16,7 @@ class ShoppingCartPage {
 
     async checkoutCart () {
         await t.click(this.checkoutBttn)
-    }};
+    }
+}
 
 export default new ShoppingCartPage();

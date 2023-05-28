@@ -21,11 +21,10 @@ class ProductsPage {
         this.facebookBttn =  Selector(".social_facebook ");
         this.twitterBttn = Selector(".social_twitter");
         this.inventoryItem = Selector(".inventory_item");
-        this.productTitle = Selector(".inventory_item_name");
+        this.productTitle = Selector('.inventory_item_name');
         this.productDescription = Selector(".inventory_item_desc");
         this.productPrice = Selector(".inventory_item_price");
     }
-
 
     async openBurgerMenu () {
         await t.click(this.burgerMenu);
@@ -105,7 +104,32 @@ class ProductsPage {
 
     async clickOnProduct(index) {
         await t.click(this.productTitle.nth(index));
-    }};
+    }
+
+    async getProductTitles() {
+        const count = await this.productTitle.count;
+        const productTitles = [];
+      
+        for (let i = 0; i < count; i++) {
+          const title = await this.productTitle.nth(i).innerText;
+          console.log(`Title ${i}: ${title}`);
+          productTitles.push(title);
+        }
+        return productTitles;
+    }
+
+    async getProductPrices() {
+        const count = await this.productPrice.count;
+        const productPrices = [];
+
+        for (let i = 0; i < count; i++) {
+            const priceTag = await this.productPrice.nth(i).innerText;
+            console.log(`Product Price ${i}: ${priceTag}`);
+            productPrices.push(priceTag);
+        }
+        return productPrices;
+    }
+};
 
 export default new ProductsPage();
 
