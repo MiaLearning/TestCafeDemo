@@ -28,6 +28,13 @@ class CheckoutPage {
     async returnToCartPage() {
         await t.click(this.cancelBttn);
     }
+
+    async checkoutMyInformation(myPersonalDetails) {
+        await t
+            .typeText(this.firstNameInput, myPersonalDetails.myfirstName)
+            .typeText(this.lastNameInput, myPersonalDetails.mylastName)
+            .typeText(this.zipCodeInput, myPersonalDetails.mypostalCode)
+    }
 }
 
 export default new CheckoutPage();
