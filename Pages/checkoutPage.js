@@ -29,11 +29,11 @@ class CheckoutPage {
         await t.click(this.cancelBttn);
     }
 
-    async checkoutMyInformation(myPersonalDetails) {
+    async checkoutMyInformation(user) {
         await t
-            .typeText(this.firstNameInput, myPersonalDetails.myfirstName)
-            .typeText(this.lastNameInput, myPersonalDetails.mylastName)
-            .typeText(this.zipCodeInput, myPersonalDetails.mypostalCode)
+            .typeText(this.firstNameInput, user.myfirstName)
+            .typeText(this.lastNameInput, user.mylastName)
+            .typeText(this.zipCodeInput, user.mypostalCode)
     }
 }
 

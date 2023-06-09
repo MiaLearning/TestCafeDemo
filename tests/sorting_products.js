@@ -1,6 +1,6 @@
 import loginPage from "../Pages/loginPage.js";
 import productsPage from "../Pages/productsPage.js";
-import { validUser } from "../Pages/users.js";
+import { validUser } from "../Constants/users.js";
 const baseUrl = 'https://www.saucedemo.com/';
 
 

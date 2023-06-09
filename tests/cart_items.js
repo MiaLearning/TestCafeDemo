@@ -4,8 +4,8 @@ import productsPage from "../Pages/productsPage.js";
 import shoppingCartPage from "../Pages/shoppingCartPage.js";
 import checkoutPage from "../Pages/checkoutPage.js";
 import checkoutOverviewPage from "../Pages/checkoutOverviewPage.js";
-import { validUser } from "../Pages/users.js";
-import { myPersonalDetails } from "../Pages/userInformation.js";
+import { validUser } from "../Constants/users.js";
+import { myPersonalDetails } from "../Constants/userInformation.js";
 
 const baseUrl = 'https://www.saucedemo.com/';
 const randomIndex = Math.floor(Math.random() * 6);

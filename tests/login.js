@@ -1,7 +1,7 @@
 import { Selector, t, ClientFunction } from "testcafe";
 import loginPage from "../Pages/loginPage";
 import ProductsPage from "../Pages/productsPage.js";
-import { invalidUser, invalidPassword, invalidUserPssw, lockedOutUser, validUser } from "../Pages/users";
+import { invalidUser, invalidPassword, invalidUserPssw, lockedOutUser, validUser } from "../Constants/users.js";
 
 const baseUrl = 'https://www.saucedemo.com/';
 const expectedErrorLockedUser = 'Epic sadface: Sorry, this user has been locked out.';
