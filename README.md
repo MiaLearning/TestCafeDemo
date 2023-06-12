@@ -12,8 +12,8 @@
 - TestCafe docs: https://testcafe.io/documentation/402665/reference/test-api/testcontroller
 
 - How to run tests: 'npm run test'
-
 - After git push , BIG GREEN BUTTIN 
+- User underscores for branch names
 
 
 

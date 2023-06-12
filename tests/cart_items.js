@@ -4,13 +4,11 @@ import productsPage from "../Pages/productsPage.js";
 import shoppingCartPage from "../Pages/shoppingCartPage.js";
 import checkoutPage from "../Pages/checkoutPage.js";
 import checkoutOverviewPage from "../Pages/checkoutOverviewPage.js";
-import { validUser } from "../Pages/users.js";
+import { validUser } from "../Constants/users.js";
+import { myPersonalDetails } from "../Constants/userInformation.js";
 
 const baseUrl = 'https://www.saucedemo.com/';
 const randomIndex = Math.floor(Math.random() * 6);
-const myFirstName = 'Mia';
-const myLastName = 'J';
-const myZipCode = '407280';
 
 
 fixture`Add product to cart`
@@ -109,9 +107,7 @@ test(`Add 2 products and verify the cart total is correct`, async t => {
     const price2 = parseFloat(product2Price.replace('$', ''));
     const totalPrice = price1 + price2;
     await shoppingCartPage.checkoutCart();
-    await checkoutPage.typeFirstName(myFirstName);
-    await checkoutPage.typeLastName(myLastName);
-    await checkoutPage.typeZipCode(myZipCode);
+    await checkoutPage.checkoutMyInformation(myPersonalDetails);
     await checkoutPage.goToCheckoutOverview();
     const productTotal = await checkoutOverviewPage.cartTotal.textContent;
     const subtotalCart = parseFloat(productTotal.replace('Item total: $', ''));

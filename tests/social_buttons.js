@@ -1,7 +1,6 @@
-import { Selector, t, ClientFunction } from "testcafe";
 import loginPage from "../Pages/loginPage";
 import productsPage from "../Pages/productsPage";
-import { validUser } from "../Pages/users";
+import { validUser } from "../Constants/users.js";
 
 const baseUrl = 'https://www.saucedemo.com/';
 const twitterUrl = 'https://twitter.com/saucelabs';
