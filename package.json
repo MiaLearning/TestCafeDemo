@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "testcafe chrome tests"
+    "sauce": "testcafe chrome SauceDemo/tests",
+    "demo": "testcafe chrome DemoQA/tests -e"
   },
   "repository": {
     "type": "git",
