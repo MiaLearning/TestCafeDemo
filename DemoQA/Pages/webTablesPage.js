@@ -15,7 +15,6 @@ class WebTablesPage {
         this.menuOptions = Selector("li");
         this.usersTable = Selector(".ReactTable");
         this.userRow = Selector(".rt-tr-group");
-        this.editButton = Selector("[title~='Edit']");
     }
 
     async openMenu(burgerOption) {
@@ -24,10 +23,6 @@ class WebTablesPage {
 
     async clickAddBttn() {
         await t.click(this.addBttn);
-    }
-
-    async editUser() {
-        await t.click(this.editButton);
     }
 
     async usersTableList() {
@@ -49,6 +44,10 @@ class WebTablesPage {
     async navigateToWebTablesPage(cardName, menuName) {
         await mainPage.selectCard(cardName);
         await webTablesPage.openMenu(menuName);
+    }
+
+    async selectAnyUserRow() {
+        await t.click(this.rowLine);
     }
 
 }

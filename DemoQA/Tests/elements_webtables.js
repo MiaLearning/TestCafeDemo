@@ -54,7 +54,7 @@ test(`Delete a user`, async t => {
 });
 
 
-test.only(`Edit a new user`, async t => {
+test(`Edit a new user`, async t => {
     await webTablesPage.navigateToWebTablesPage("Elements", "Web Tables");
     await registrationFormPage.addNewUser();
 
@@ -74,4 +74,18 @@ test.only(`Edit a new user`, async t => {
         .expect(changedUserDetails.emailAddress).eql(newUserDetails.email)
         .expect(changedUserDetails.salary).eql(newUserDetails.salary)
         .expect(changedUserDetails.department).eql(newUserDetails.department);
+});
+
+
+test.only(`Edit an existing user`, async t => {
+    await webTablesPage.navigateToWebTablesPage("Elements", "Web Tables");
+    await webTablesPage.selectAnyUserRow();
+
+
+
+//edit user details , specifci but general at the same time INSANITY 
+//expect new detail in new cell to be X
+// check previous tests - you know how to do this.
+//exoect oher details in other cells to be same 
+
 });
