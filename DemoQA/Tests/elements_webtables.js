@@ -13,33 +13,42 @@ fixture `User functions`
     .page(baseUrl)
 
 test(`Check page validity`, async t => {
-    await t.expect(getURL()).contains(baseUrl);
-    await t.expect(mainPage.optionCardElements.visible).eql(true);
+    await t.expect(getURL()).contains(baseUrl)
+    await t.expect(mainPage.optionCards.visible).eql(true);
 });
 
 
-test.only(`Add a user`, async t => {
-    await mainPage.selectCard("Elements");
-    await webTablesPage.openMenu("Web Tables");
-    await webTablesPage.clickAddBttn();
-    await registrationFormPage.registrationFormInformation(myUserDetails);
-    await registrationFormPage.submitForm();
+test(`Add a user`, async t => {
+    await webTablesPage.navigateToWebTablesPage("Elements", "Web Tables");
+    await registrationFormPage.addNewUser();
 
-    const newUserRow = new UserInfoRow(3);
+    const newUserRow = new UserInfoRow(3); //to modify it to not be hardocaded on a line (index needed) + check defaut reviewer pentru LAszlo , command lines in testcafe to video and screenshots si reports/ config file cu setat de paths, size window, time in teste 
     const userDetails = await newUserRow.getUserDetails();
-    
+
     await t
         .expect(userDetails.firstName).eql(myUserDetails.firstName)
         .expect(userDetails.lastName).eql(myUserDetails.lastName)
         .expect(userDetails.age).eql(myUserDetails.age)
         .expect(userDetails.emailAddress).eql(myUserDetails.email)
         .expect(userDetails.salary).eql(myUserDetails.salary)
-        .expect(userDetails.department).eql(myUserDetails.department)
+        .expect(userDetails.department).eql(myUserDetails.department);
 });
 
 
 test(`Delete a user`, async t => {
+    await webTablesPage.navigateToWebTablesPage("Elements", "Web Tables");
+      
+    const currentUsersList = await webTablesPage.usersTableList();
+
     await registrationFormPage.addNewUser();
-    await t.click(userInfoPage.deleteUser());
-    await t.expect
+ 
+    const latestUser = new UserInfoRow(3);
+
+    await latestUser.deleteUser();
+
+    const latestUsersList = await webTablesPage.usersTableList();
+
+    await t
+        .expect(webTablesPage.usersTable.innerText).notContains('Mia')
+        .expect(currentUsersList).eql(latestUsersList);
 });

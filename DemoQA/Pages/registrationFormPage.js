@@ -30,8 +30,6 @@ class RegistrationFormPage {
     }
 
     async addNewUser() {
-        await mainPage.selectCard("Elements");
-        await webTablesPage.openMenu("Web Tables");
         await webTablesPage.clickAddBttn();
         await this.registrationFormInformation(myUserDetails);
         await this.submitForm();

@@ -2,7 +2,7 @@ import { Selector, t } from "testcafe";
 
 class MainPage {
     constructor () {
-        this.optionCards = Selector("h5");
+        this.optionCards = Selector(".card");
     }
 
     async selectCard(cardName) {

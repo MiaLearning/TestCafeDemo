@@ -1,4 +1,7 @@
 import { Selector, t } from "testcafe";
+import webTablesPage from "../Pages/webTablesPage";
+import UserInfoRow from "../Pages/userInfoPage";
+import mainPage from "../Pages/mainPage";
 
 
 class WebTablesPage {
@@ -10,6 +13,9 @@ class WebTablesPage {
         this.burgerWebTables = Selector("#item-3");
         this.rowLine = Selector(".rt-tbody [role='row']");
         this.menuOptions = Selector("li");
+        this.usersTable = Selector(".ReactTable");
+        this.userRow = Selector(".rt-tr-group");
+        this.editButton = Selector("[title~='Edit']");
     }
 
     async openMenu(burgerOption) {
@@ -19,6 +25,32 @@ class WebTablesPage {
     async clickAddBttn() {
         await t.click(this.addBttn);
     }
+
+    async editUser() {
+        await t.click(this.editButton);
+    }
+
+    async usersTableList() {
+        const rowCount = await webTablesPage.rowLine.count;
+        const existingUsersDetails = [];
+
+        for (let i = 0; i < rowCount; i++) {
+            const existingUser = new UserInfoRow(i);
+            const userDetails = await existingUser.getUserDetails();
+
+            if (userDetails.firstName.trim() !== "" && userDetails.lastName.trim() !== "") {
+            existingUsersDetails.push(userDetails);
+            }
+        }
+
+        return existingUsersDetails;   
+    }
+
+    async navigateToWebTablesPage(cardName, menuName) {
+        await mainPage.selectCard(cardName);
+        await webTablesPage.openMenu(menuName);
+    }
+
 }
 
 export default new WebTablesPage();

@@ -2,12 +2,11 @@ import webTablesPage from "../Pages/webTablesPage";
 import { t } from "testcafe";
 
 
-
 export default class UserInfoRow {
     constructor(index) {
         this.container = webTablesPage.rowLine.nth(index);
         this.editBttn = this.container.find("[title~='Edit']");
-        this.deleteBttn = this.container.find("[title~='Delete]");
+        this.deleteBttn = this.container.find("[title~='Delete']");
         this.firstName = this.container.find(".rt-td:nth-child(1)");
         this.lastName = this.container.find(".rt-td:nth-child(2)");
         this.ageNo = this.container.find(".rt-td:nth-child(3)");
@@ -30,6 +29,11 @@ export default class UserInfoRow {
     async deleteUser() {
         await t.click(this.deleteBttn);
     }
+
+    async editUser() {
+        await t.click(this.editBttn);
+    }
+
 }
 
 //read export/import index pages
