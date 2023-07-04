@@ -3,7 +3,7 @@ import mainPage from "../Pages/mainPage";
 import webTablesPage from "../Pages/webTablesPage";
 import registrationFormPage from "../Pages/registrationFormPage";
 import { myUserDetails, newUserDetails } from "../Constants/userInformation";
-import UserInfoRow from "../Pages/userInfoPage";
+import UserInfoRow from "../Pages/userPage";
 
 const baseUrl = 'https://demoqa.com/';
 const getURL = ClientFunction(() => window.location.href);
@@ -62,7 +62,7 @@ test(`Edit a new user`, async t => {
 
     await newUser.editUser();
     await registrationFormPage.clearFormFields(); 
-    await registrationFormPage.registrationFormInformation(newUserDetails);
+    await registrationFormPage.fillRegistrationForm(newUserDetails);
     await registrationFormPage.submitForm();
 
     const changedUserDetails = await newUser.getUserDetails();
@@ -77,7 +77,7 @@ test(`Edit a new user`, async t => {
 });
 
 
-test.only(`Edit an existing user`, async t => {
+test(`Edit an existing user`, async t => {
     await webTablesPage.navigateToWebTablesPage("Elements", "Web Tables");
     await webTablesPage.selectAnyUserRow();
 

@@ -1,6 +1,5 @@
 import { Selector, t } from "testcafe";
 import { myUserDetails } from "../Constants/userInformation";
-import mainPage from "../Pages/mainPage";
 import webTablesPage from "../Pages/webTablesPage";
 
 
@@ -15,7 +14,7 @@ class RegistrationFormPage {
         this.submitBttn = Selector("#submit");
     }
 
-    async registrationFormInformation(user) {
+    async fillRegistrationForm(user) {
         await t
             .typeText(this.firstNameInput, user.firstName)
             .typeText(this.lastNameInput, user.lastName)
@@ -31,7 +30,7 @@ class RegistrationFormPage {
 
     async addNewUser() {
         await webTablesPage.clickAddBttn();
-        await this.registrationFormInformation(myUserDetails);
+        await this.fillRegistrationForm(myUserDetails);
         await this.submitForm();
     }
 

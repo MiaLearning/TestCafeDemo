@@ -1,6 +1,6 @@
 import { Selector, t } from "testcafe";
 import webTablesPage from "../Pages/webTablesPage";
-import UserInfoRow from "../Pages/userInfoPage";
+import UserInfoRow from "./userPage";
 import mainPage from "../Pages/mainPage";
 
 

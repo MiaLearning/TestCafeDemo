@@ -1,4 +1,4 @@
-import webTablesPage from "../Pages/webTablesPage";
+import webTablesPage from "./webTablesPage";
 import { Selector, t } from "testcafe";
 
 
