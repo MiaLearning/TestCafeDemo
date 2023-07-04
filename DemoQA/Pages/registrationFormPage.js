@@ -34,6 +34,22 @@ class RegistrationFormPage {
         await this.registrationFormInformation(myUserDetails);
         await this.submitForm();
     }
+
+    async clearFormFields() {
+        const fields = [
+            this.firstNameInput,
+            this.lastNameInput,
+            this.emailInput,
+            this.ageInput,
+            this.salaryInput,
+            this.departmentInput
+        ]
+    for (const field of fields) {
+      await t
+        .click(field).pressKey('ctrl+a delete');
+    }}
 }
+
+    
 
 export default new RegistrationFormPage();
