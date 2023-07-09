@@ -1,12 +1,13 @@
 import { ClientFunction } from "testcafe";
+import { myUserDetails, newUserDetails } from "../Constants/userInformation";
 import mainPage from "../Pages/mainPage";
 import webTablesPage from "../Pages/webTablesPage";
 import registrationFormPage from "../Pages/registrationFormPage";
-import { myUserDetails, newUserDetails } from "../Constants/userInformation";
 import UserInfoRow from "../Pages/userPage";
 
 const baseUrl = 'https://demoqa.com/';
 const getURL = ClientFunction(() => window.location.href);
+
 
 
 fixture `User functions`
@@ -20,72 +21,91 @@ test(`Check page validity`, async t => {
 
 test(`Add a user`, async t => {
     await webTablesPage.navigateToWebTablesPage("Elements", "Web Tables");
-    await registrationFormPage.addNewUser();
+    await webTablesPage.addNewUser(newUserDetails);
 
-    const newUserRow = new UserInfoRow(3); //to modify it to not be hardocaded on a line (index needed) + check defaut reviewer pentru LAszlo , command lines in testcafe to video and screenshots si reports/ config file cu setat de paths, size window, time in teste 
+    const newUserRow = new UserInfoRow(3); //modify it to not be hardocaded on a line (index needed) + check defaut reviewer pentru LAszlo , command lines in testcafe to video and screenshots si reports/ config file cu setat de paths, size window, time in teste 
     const userDetails = await newUserRow.getUserDetails();
 
     await t
-        .expect(userDetails.firstName).eql(myUserDetails.firstName)
-        .expect(userDetails.lastName).eql(myUserDetails.lastName)
-        .expect(userDetails.age).eql(myUserDetails.age)
-        .expect(userDetails.emailAddress).eql(myUserDetails.email)
-        .expect(userDetails.salary).eql(myUserDetails.salary)
-        .expect(userDetails.department).eql(myUserDetails.department);
+        .expect(userDetails.firstName).eql(newUserDetails.firstName)
+        .expect(userDetails.lastName).eql(newUserDetails.lastName)
+        .expect(userDetails.age).eql(newUserDetails.age)
+        .expect(userDetails.emailAddress).eql(newUserDetails.email)
+        .expect(userDetails.salary).eql(newUserDetails.salary)
+        .expect(userDetails.department).eql(newUserDetails.department);
 });
 
 
 test(`Delete a user`, async t => {
     await webTablesPage.navigateToWebTablesPage("Elements", "Web Tables");
       
-    const currentUsersList = await webTablesPage.usersTableList();
+    const currentUsersList = await webTablesPage.filterValidUserDetails();
 
-    await registrationFormPage.addNewUser();
+    await webTablesPage.addNewUser(newUserDetails);
  
     const latestUser = new UserInfoRow(3);
 
     await latestUser.deleteUser();
 
-    const latestUsersList = await webTablesPage.usersTableList();
+    const latestUsersList = await webTablesPage.filterValidUserDetails();
 
     await t
-        .expect(webTablesPage.usersTable.innerText).notContains('Mia')
+        .expect(webTablesPage.usersTable.innerText).notContains('Felix')
         .expect(currentUsersList).eql(latestUsersList);
 });
 
 
 test(`Edit a new user`, async t => {
     await webTablesPage.navigateToWebTablesPage("Elements", "Web Tables");
-    await registrationFormPage.addNewUser();
+    await webTablesPage.addNewUser(myUserDetails);
 
     const newUser = new UserInfoRow(3);
 
     await newUser.editUser();
-    await registrationFormPage.clearFormFields(); 
-    await registrationFormPage.fillRegistrationForm(newUserDetails);
-    await registrationFormPage.submitForm();
+    await registrationFormPage.fillRegistrationForm(myUserDetails);
 
     const changedUserDetails = await newUser.getUserDetails();
 
     await t
-        .expect(changedUserDetails.firstName).eql(newUserDetails.firstName)
-        .expect(changedUserDetails.lastName).eql(newUserDetails.lastName)
-        .expect(changedUserDetails.age).eql(newUserDetails.age)
-        .expect(changedUserDetails.emailAddress).eql(newUserDetails.email)
-        .expect(changedUserDetails.salary).eql(newUserDetails.salary)
-        .expect(changedUserDetails.department).eql(newUserDetails.department);
+        .expect(changedUserDetails.firstName).eql(myUserDetails.firstName)
+        .expect(changedUserDetails.lastName).eql(myUserDetails.lastName)
+        .expect(changedUserDetails.age).eql(myUserDetails.age)
+        .expect(changedUserDetails.emailAddress).eql(myUserDetails.email)
+        .expect(changedUserDetails.salary).eql(myUserDetails.salary)
+        .expect(changedUserDetails.department).eql(myUserDetails.department);
 });
 
 
 test(`Edit an existing user`, async t => {
     await webTablesPage.navigateToWebTablesPage("Elements", "Web Tables");
-    await webTablesPage.selectAnyUserRow();
 
+    const existingUser = new UserInfoRow(0);
 
+    await existingUser.editUser();
+    await registrationFormPage.fillRegistrationForm(myUserDetails);
 
-//edit user details , specifci but general at the same time INSANITY 
-//expect new detail in new cell to be X
-// check previous tests - you know how to do this.
-//exoect oher details in other cells to be same 
+    const modifiedUserDetails = await existingUser.getUserDetails();
 
+    await t
+    .expect(modifiedUserDetails.firstName).eql(myUserDetails.firstName)
+    .expect(modifiedUserDetails.lastName).eql(myUserDetails.lastName)
+    .expect(modifiedUserDetails.age).eql(myUserDetails.age)
+    .expect(modifiedUserDetails.emailAddress).eql(myUserDetails.email)
+    .expect(modifiedUserDetails.salary).eql(myUserDetails.salary)
+    .expect(modifiedUserDetails.department).eql(myUserDetails.department);
 });
+
+
+test(`Search table for firstName`, async t => {
+    await webTablesPage.navigateToWebTablesPage("Elements", "Web Tables");
+    
+    const firstNameUser = new UserInfoRow(0);
+    const userName = "Cierra"; // should it be more general? so it catches any first Name property from table?
+    
+    await webTablesPage.enterSearchText(userName);
+    
+    const searchedUserName = await firstNameUser.getUserDetails();
+    
+    await t.expect(searchedUserName.firstName.trim()).eql(userName);
+  });
+  

@@ -1,5 +1,6 @@
 import webTablesPage from "./webTablesPage";
-import { Selector, t } from "testcafe";
+import { t } from "testcafe";
+
 
 
 export default class UserInfoRow {
@@ -13,13 +14,7 @@ export default class UserInfoRow {
         this.emailAddress = this.container.find(".rt-td:nth-child(4)");
         this.salary = this.container.find(".rt-td:nth-child(5)")
         this.department = this.container.find(".rt-td:nth-child(6)");
-        this.firstNameInput = Selector("#firstName");
-        this.lastNameInput = Selector("#lastName");
-        this.emailInput = Selector("#userEmail");
-        this.agoNoInput = Selector("#age");
-        this.salaryInput = Selector("#salary");
-        this.departmentInput = Selector("#department");
-    }
+}
 
     async getUserDetails() {
         return {
@@ -40,5 +35,3 @@ export default class UserInfoRow {
         await t.click(this.editBttn);
     }
 }
-
-//read export/import index pages

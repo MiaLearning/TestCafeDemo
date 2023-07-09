@@ -1,6 +1,5 @@
 import { Selector, t } from "testcafe";
-import { myUserDetails } from "../Constants/userInformation";
-import webTablesPage from "../Pages/webTablesPage";
+
 
 
 class RegistrationFormPage {
@@ -16,39 +15,15 @@ class RegistrationFormPage {
 
     async fillRegistrationForm(user) {
         await t
-            .typeText(this.firstNameInput, user.firstName)
-            .typeText(this.lastNameInput, user.lastName)
-            .typeText(this.emailInput, user.email)
-            .typeText(this.ageInput, user.age)
-            .typeText(this.salaryInput, user.salary)
-            .typeText(this.departmentInput, user.department)
+            .typeText(this.firstNameInput, user.firstName, { replace: true })
+            .typeText(this.lastNameInput, user.lastName, { replace: true })
+            .typeText(this.emailInput, user.email, { replace: true })
+            .typeText(this.ageInput, user.age, { replace: true })
+            .typeText(this.salaryInput, user.salary, { replace: true })
+            .typeText(this.departmentInput, user.department, { replace: true })
+            .click(this.submitBttn);
     }
-
-    async submitForm () {
-        await t.click(this.submitBttn);
-    }
-
-    async addNewUser() {
-        await webTablesPage.clickAddBttn();
-        await this.fillRegistrationForm(myUserDetails);
-        await this.submitForm();
-    }
-
-    async clearFormFields() {
-        const fields = [
-            this.firstNameInput,
-            this.lastNameInput,
-            this.emailInput,
-            this.ageInput,
-            this.salaryInput,
-            this.departmentInput
-        ]
-    for (const field of fields) {
-      await t
-        .click(field).pressKey('ctrl+a delete');
-    }}
 }
 
     
-
 export default new RegistrationFormPage();

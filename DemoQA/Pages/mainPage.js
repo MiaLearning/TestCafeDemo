@@ -1,5 +1,7 @@
 import { Selector, t } from "testcafe";
 
+
+
 class MainPage {
     constructor () {
         this.optionCards = Selector(".card");
@@ -9,5 +11,6 @@ class MainPage {
         await t.click(this.optionCards.withText(cardName));
     }
 }
+
 
 export default new MainPage();
