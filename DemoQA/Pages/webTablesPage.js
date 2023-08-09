@@ -28,23 +28,21 @@ class WebTablesPage {
         await t.click(this.addBttn);
     }
     
-    async filterValidUserDetails() {
+    async fetchValidUserDetails() {
         const rowCount = await webTablesPage.rowLine.count;
         const existingUsersDetails = [];
-      
+
         for (let i = 0; i < rowCount; i++) {
           const existingUser = new UserInfoRow(i);
           const userDetails = await existingUser.getUserDetails();
   
-            if (userDetails.firstName.trim() !== "" && userDetails.lastName.trim() !== "") {
-            existingUsersDetails.push(userDetails);
-                } else {
-                    if (userDetails.firstName.trim() === "" && userDetails.lastName.trim() === "") {
-                    }
-            break;          
-                }
+            if (userDetails.firstName.trim() !== "" && userDetails.lastName.trim() !== "") { 
+                existingUsersDetails.push(userDetails);
+            } else {
+                break;          
+            }
         }   
-        return existingUsersDetails;
+        return existingUsersDetails;  
     }
 
     async navigateToWebTablesPage(cardName, menuName) {
@@ -57,11 +55,12 @@ class WebTablesPage {
         await registrationFormPage.fillRegistrationForm(user);
     }
 
-    async enterSearchText(userName) {
+    async enterSearchText(string) {
         await t
           .click(this.searchBar)
-          .typeText(this.searchBar, userName);
-      }      
+          .typeText(this.searchBar, string);
+    }
 }
+
 
 export default new WebTablesPage();

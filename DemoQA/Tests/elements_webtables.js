@@ -1,4 +1,4 @@
-import { ClientFunction } from "testcafe";
+import { Selector, ClientFunction } from "testcafe";
 import { myUserDetails, newUserDetails } from "../Constants/userInformation";
 import mainPage from "../Pages/mainPage";
 import webTablesPage from "../Pages/webTablesPage";
@@ -7,6 +7,7 @@ import UserInfoRow from "../Pages/userPage";
 
 const baseUrl = 'https://demoqa.com/';
 const getURL = ClientFunction(() => window.location.href);
+//const randomIndex = Math.floor(Math.random() * 10);
 
 
 
@@ -23,7 +24,7 @@ test(`Add a user`, async t => {
     await webTablesPage.navigateToWebTablesPage("Elements", "Web Tables");
     await webTablesPage.addNewUser(newUserDetails);
 
-    const newUserRow = new UserInfoRow(3); //modify it to not be hardocaded on a line (index needed) + check defaut reviewer pentru LAszlo , command lines in testcafe to video and screenshots si reports/ config file cu setat de paths, size window, time in teste 
+    const newUserRow = new UserInfoRow(3);
     const userDetails = await newUserRow.getUserDetails();
 
     await t
@@ -39,18 +40,20 @@ test(`Add a user`, async t => {
 test(`Delete a user`, async t => {
     await webTablesPage.navigateToWebTablesPage("Elements", "Web Tables");
       
-    const currentUsersList = await webTablesPage.filterValidUserDetails();
+    const currentUsersList = await webTablesPage.fetchValidUserDetails();
 
     await webTablesPage.addNewUser(newUserDetails);
+
+    const findUserDetails = currentUsersList.find(x => x.firstName === 'Felix')
  
     const latestUser = new UserInfoRow(3);
 
     await latestUser.deleteUser();
 
-    const latestUsersList = await webTablesPage.filterValidUserDetails();
+    const latestUsersList = await webTablesPage.fetchValidUserDetails();
 
     await t
-        .expect(webTablesPage.usersTable.innerText).notContains('Felix')
+        .expect(webTablesPage.usersTable.innerText).notContains(findUserDetails) 
         .expect(currentUsersList).eql(latestUsersList);
 });
 
@@ -62,17 +65,17 @@ test(`Edit a new user`, async t => {
     const newUser = new UserInfoRow(3);
 
     await newUser.editUser();
-    await registrationFormPage.fillRegistrationForm(myUserDetails);
+    await registrationFormPage.fillRegistrationForm(newUserDetails); 
 
     const changedUserDetails = await newUser.getUserDetails();
 
     await t
-        .expect(changedUserDetails.firstName).eql(myUserDetails.firstName)
-        .expect(changedUserDetails.lastName).eql(myUserDetails.lastName)
-        .expect(changedUserDetails.age).eql(myUserDetails.age)
-        .expect(changedUserDetails.emailAddress).eql(myUserDetails.email)
-        .expect(changedUserDetails.salary).eql(myUserDetails.salary)
-        .expect(changedUserDetails.department).eql(myUserDetails.department);
+        .expect(changedUserDetails.firstName).eql(newUserDetails.firstName)
+        .expect(changedUserDetails.lastName).eql(newUserDetails.lastName)
+        .expect(changedUserDetails.age).eql(newUserDetails.age)
+        .expect(changedUserDetails.emailAddress).eql(newUserDetails.email)
+        .expect(changedUserDetails.salary).eql(newUserDetails.salary)
+        .expect(changedUserDetails.department).eql(newUserDetails.department);
 });
 
 
@@ -96,16 +99,20 @@ test(`Edit an existing user`, async t => {
 });
 
 
-test(`Search table for firstName`, async t => {
+test.only('Search table for firstName', async t => { 
     await webTablesPage.navigateToWebTablesPage("Elements", "Web Tables");
     
-    const firstNameUser = new UserInfoRow(0);
-    const userName = "Cierra"; // should it be more general? so it catches any first Name property from table?
+    const existingUsersDetails = await webTablesPage.fetchValidUserDetails();
+    const randomIndex = Math.floor(Math.random() * existingUsersDetails.length);
+    const randomUser = existingUsersDetails[randomIndex];
+
+    await webTablesPage.enterSearchText(randomUser.firstName);
     
-    await webTablesPage.enterSearchText(userName);
+    const searchedUserRows = await webTablesPage.fetchValidUserDetails();
     
-    const searchedUserName = await firstNameUser.getUserDetails();
+    await t.expect(searchedUserRows.length).eql(1);
     
-    await t.expect(searchedUserName.firstName.trim()).eql(userName);
-  });
-  
+    const searchedUserFirstName = searchedUserRows.find(webTablesPage.firstNameValue);
+
+    await t.expect(searchedUserFirstName.firstName).eql(randomUser.firstName);
+});

@@ -5,7 +5,7 @@ export const myUserDetails = {
     age: '30',
     salary: '1000',
     department: 'Sales'
-}
+};
 
 export const newUserDetails = {
     firstName: 'Felix',
