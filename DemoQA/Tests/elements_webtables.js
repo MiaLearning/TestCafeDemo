@@ -116,3 +116,102 @@ test('Search table for firstName', async t => {
     await t.expect(searchedUserFirstName.firstName).eql(randomUser.firstName);
 });
 
+
+test('Search table for lastName', async t => { 
+    await webTablesPage.navigateToWebTablesPage("Elements", "Web Tables");
+    
+    const existingUsersDetails = await webTablesPage.fetchValidUserDetails();
+    const randomIndex = Math.floor(Math.random() * existingUsersDetails.length);
+    const randomUser = existingUsersDetails[randomIndex];
+
+    await webTablesPage.enterSearchText(randomUser.lastName);
+    
+    const searchedUserRows = await webTablesPage.fetchValidUserDetails();
+    
+    await t.expect(searchedUserRows.length).eql(1);
+    
+    const searchedUserLastNameRow = searchedUserRows.find(row => row.lastName === randomUser.lastName); 
+    const searchedUserLastName = searchedUserLastNameRow.lastName;
+
+    await t.expect(searchedUserLastName).eql(randomUser.lastName);
+});
+
+
+test('Search table for age', async t => { 
+    await webTablesPage.navigateToWebTablesPage("Elements", "Web Tables");
+    
+    const existingUsersDetails = await webTablesPage.fetchValidUserDetails();
+    const randomIndex = Math.floor(Math.random() * existingUsersDetails.length);
+    const randomUser = existingUsersDetails[randomIndex];
+
+    await webTablesPage.enterSearchText(randomUser.age);
+
+    const searchedUserRows = await webTablesPage.fetchValidUserDetails();
+    
+    await t.expect(searchedUserRows.length).eql(1);
+    
+    const searchedUserAgeRow = searchedUserRows.find(row => row.age === randomUser.age);
+    const searchedUserAge = searchedUserAgeRow.age;
+
+    await t.expect(searchedUserAge).eql(randomUser.age);
+});
+
+
+test('Search table for email', async t => {
+    await webTablesPage.navigateToWebTablesPage("Elements", "Web Tables");
+
+    const existingUsersDetails = await webTablesPage.fetchValidUserDetails();
+    const randomIndex = Math.floor(Math.random() * existingUsersDetails.length);
+    const randomUser = existingUsersDetails[randomIndex];
+
+    await webTablesPage.enterSearchText(randomUser.emailAddress);
+
+    const searchedUserRows = await webTablesPage.fetchValidUserDetails();
+
+    await t.expect(searchedUserRows.length).eql(1);
+
+    const searchedUserEmailAddress =  searchedUserRows.find(row => row.emailAddress === randomUser.emailAddress);
+    const searchedUserEmail = searchedUserEmailAddress.emailAddress;
+
+    await t.expect(searchedUserEmail).eql(randomUser.emailAddress);
+});
+
+
+test('Search table for salary', async t => {
+    await webTablesPage.navigateToWebTablesPage("Elements", "Web Tables");
+
+    const existingUsersDetails = await webTablesPage.fetchValidUserDetails();
+    const randomIndex = Math.floor(Math.random() * existingUsersDetails.length);
+    const randomUser = existingUsersDetails[randomIndex];
+
+    await webTablesPage.enterSearchText(randomUser.salary);
+
+    const searchedUserRows = await webTablesPage.fetchValidUserDetails();
+
+    await t.expect(searchedUserRows.length).eql(1);
+
+    const searchedUserSalary = searchedUserRows.find(row => row.salary === randomUser.salary);
+    const searchedUserCurrentSalary = searchedUserSalary.salary;
+
+    await t.expect(searchedUserCurrentSalary).eql(randomUser.salary);
+});
+
+
+test('Search table for department', async t => {
+    await webTablesPage.navigateToWebTablesPage("Elements", "Web Tables");
+
+    const existingUsersDetails = await webTablesPage.fetchValidUserDetails();
+    const randomIndex = Math.floor(Math.random() * existingUsersDetails.length);
+    const randomUser = existingUsersDetails[randomIndex];
+
+    await webTablesPage.enterSearchText(randomUser.department);
+
+    const searchedUserRows = await webTablesPage.fetchValidUserDetails();
+
+    await t.expect(searchedUserRows.length).eql(1);
+
+    const searchedUserDepartment = searchedUserRows.find(row => row.department === randomUser.department);
+    const searchedUserDep = searchedUserDepartment.department;
+
+    await t.expect(searchedUserDep).eql(randomUser.department);
+});

@@ -18,6 +18,7 @@ class WebTablesPage {
         this.usersTable = Selector(".ReactTable");
         this.userRow = Selector(".rt-tr-group");
         this.firstNameValue = Selector("div.rt-td:first-child");
+        this.lastNameValue = Selector("div.rt-td:nth-child(2)");
     }
 
     async openMenu(burgerOption) {
