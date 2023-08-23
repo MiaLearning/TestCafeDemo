@@ -57,7 +57,6 @@ class WebTablesPage {
 
     async enterSearchText(string) {
         await t
-          .click(this.searchBar)
           .typeText(this.searchBar, string);
     }
 }

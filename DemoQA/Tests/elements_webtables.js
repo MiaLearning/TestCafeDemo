@@ -7,7 +7,6 @@ import UserInfoRow from "../Pages/userPage";
 
 const baseUrl = 'https://demoqa.com/';
 const getURL = ClientFunction(() => window.location.href);
-//const randomIndex = Math.floor(Math.random() * 10);
 
 
 
@@ -44,7 +43,7 @@ test(`Delete a user`, async t => {
 
     await webTablesPage.addNewUser(newUserDetails);
 
-    const findUserDetails = currentUsersList.find(x => x.firstName === 'Felix')
+    const findUserDetails = currentUsersList.find(x => x.firstName === newUserDetails.firstName)
  
     const latestUser = new UserInfoRow(3);
 
@@ -90,16 +89,16 @@ test(`Edit an existing user`, async t => {
     const modifiedUserDetails = await existingUser.getUserDetails();
 
     await t
-    .expect(modifiedUserDetails.firstName).eql(myUserDetails.firstName)
-    .expect(modifiedUserDetails.lastName).eql(myUserDetails.lastName)
-    .expect(modifiedUserDetails.age).eql(myUserDetails.age)
-    .expect(modifiedUserDetails.emailAddress).eql(myUserDetails.email)
-    .expect(modifiedUserDetails.salary).eql(myUserDetails.salary)
-    .expect(modifiedUserDetails.department).eql(myUserDetails.department);
+        .expect(modifiedUserDetails.firstName).eql(myUserDetails.firstName)
+        .expect(modifiedUserDetails.lastName).eql(myUserDetails.lastName)
+        .expect(modifiedUserDetails.age).eql(myUserDetails.age)
+        .expect(modifiedUserDetails.emailAddress).eql(myUserDetails.email)
+        .expect(modifiedUserDetails.salary).eql(myUserDetails.salary)
+        .expect(modifiedUserDetails.department).eql(myUserDetails.department);
 });
 
 
-test.only('Search table for firstName', async t => { 
+test('Search table for firstName', async t => { 
     await webTablesPage.navigateToWebTablesPage("Elements", "Web Tables");
     
     const existingUsersDetails = await webTablesPage.fetchValidUserDetails();
@@ -116,3 +115,4 @@ test.only('Search table for firstName', async t => {
 
     await t.expect(searchedUserFirstName.firstName).eql(randomUser.firstName);
 });
+
