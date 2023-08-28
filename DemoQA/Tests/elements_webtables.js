@@ -107,13 +107,15 @@ test('Search table for firstName', async t => {
 
     await webTablesPage.enterSearchText(randomUser.firstName);
     
-    const searchedUserRows = await webTablesPage.fetchValidUserDetails();
-    
-    await t.expect(searchedUserRows.length).eql(1);
-    
-    const searchedUserFirstName = searchedUserRows.find(webTablesPage.firstNameValue);
+    const searchedUserRows = await webTablesPage.fetchValidUserDetails();  
+    const searchedUserFirstName = searchedUserRows.filter(row => row.firstName === randomUser.firstName);
+    const expectedRowCount = searchedUserFirstName.length;
 
-    await t.expect(searchedUserFirstName.firstName).eql(randomUser.firstName);
+    await t.expect(searchedUserFirstName.length).eql(expectedRowCount);
+
+    const searchedMaidenName = searchedUserFirstName[0].firstName;
+    
+    await t.expect(searchedMaidenName).eql(randomUser.firstName);
 });
 
 
@@ -126,14 +128,15 @@ test('Search table for lastName', async t => {
 
     await webTablesPage.enterSearchText(randomUser.lastName);
     
-    const searchedUserRows = await webTablesPage.fetchValidUserDetails();
-    
-    await t.expect(searchedUserRows.length).eql(1);
-    
-    const searchedUserLastNameRow = searchedUserRows.find(row => row.lastName === randomUser.lastName); 
-    const searchedUserLastName = searchedUserLastNameRow.lastName;
+    const searchedUserRows = await webTablesPage.fetchValidUserDetails();  
+    const searchedUserLastName = searchedUserRows.filter(row => row.lastName === randomUser.lastName);
+    const expectedRowCount = searchedUserLastName.length;
 
-    await t.expect(searchedUserLastName).eql(randomUser.lastName);
+    await t.expect(searchedUserLastName.length).eql(expectedRowCount);
+
+    const searchedFamilyName = searchedUserLastName[0].lastName;
+
+    await t.expect(searchedFamilyName).eql(randomUser.lastName);
 });
 
 
@@ -146,14 +149,15 @@ test('Search table for age', async t => {
 
     await webTablesPage.enterSearchText(randomUser.age);
 
-    const searchedUserRows = await webTablesPage.fetchValidUserDetails();
-    
-    await t.expect(searchedUserRows.length).eql(1);
-    
-    const searchedUserAgeRow = searchedUserRows.find(row => row.age === randomUser.age);
-    const searchedUserAge = searchedUserAgeRow.age;
+    const searchedUserRows = await webTablesPage.fetchValidUserDetails();   
+    const searchedUserActualAge = searchedUserRows.filter(row => row.age === randomUser.age);
+    const expectedRowCount = searchedUserActualAge.length;
 
-    await t.expect(searchedUserAge).eql(randomUser.age);
+    await t.expect(searchedUserActualAge.length).eql(expectedRowCount);
+
+    const searchedAgeNo = searchedUserActualAge[0].age;
+
+    await t.expect(searchedAgeNo).eql(randomUser.age);
 });
 
 
@@ -167,13 +171,14 @@ test('Search table for email', async t => {
     await webTablesPage.enterSearchText(randomUser.emailAddress);
 
     const searchedUserRows = await webTablesPage.fetchValidUserDetails();
+    const searchedUserEmailAddress = searchedUserRows.filter(row => row.emailAddress === randomUser.emailAddress);
+    const expectedRowCount = searchedUserEmailAddress.length;
+    
+    await t.expect(searchedUserEmailAddress.length).eql(expectedRowCount);
 
-    await t.expect(searchedUserRows.length).eql(1);
+    const searchedAddress = searchedUserEmailAddress[0].emailAddress;
 
-    const searchedUserEmailAddress =  searchedUserRows.find(row => row.emailAddress === randomUser.emailAddress);
-    const searchedUserEmail = searchedUserEmailAddress.emailAddress;
-
-    await t.expect(searchedUserEmail).eql(randomUser.emailAddress);
+    await t.expect(searchedAddress).eql(randomUser.emailAddress);
 });
 
 
@@ -187,13 +192,14 @@ test('Search table for salary', async t => {
     await webTablesPage.enterSearchText(randomUser.salary);
 
     const searchedUserRows = await webTablesPage.fetchValidUserDetails();
+    const searchedUserPay = searchedUserRows.filter(row => row.salary === randomUser.salary);
+    const expectedRowCount = searchedUserPay.length;
 
-    await t.expect(searchedUserRows.length).eql(1);
+    await t.expect(searchedUserPay.length).eql(expectedRowCount);
 
-    const searchedUserSalary = searchedUserRows.find(row => row.salary === randomUser.salary);
-    const searchedUserCurrentSalary = searchedUserSalary.salary;
+    const searchedSalary = searchedUserPay[0].salary;
 
-    await t.expect(searchedUserCurrentSalary).eql(randomUser.salary);
+    await t.expect(searchedSalary).eql(randomUser.salary);
 });
 
 
@@ -207,11 +213,12 @@ test('Search table for department', async t => {
     await webTablesPage.enterSearchText(randomUser.department);
 
     const searchedUserRows = await webTablesPage.fetchValidUserDetails();
+    const searchedUserDepartment =  searchedUserRows.filter(row => row.department === randomUser.department);
+    const expectedRowCount = searchedUserDepartment.length;
 
-    await t.expect(searchedUserRows.length).eql(1);
+    await t.expect(searchedUserDepartment.length).eql(expectedRowCount);
 
-    const searchedUserDepartment = searchedUserRows.find(row => row.department === randomUser.department);
-    const searchedUserDep = searchedUserDepartment.department;
+    const searchDepart =searchedUserDepartment[0].department;
 
-    await t.expect(searchedUserDep).eql(randomUser.department);
+    await t.expect(searchDepart).eql(randomUser.department);
 });
