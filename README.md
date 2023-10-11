@@ -15,8 +15,6 @@
 - After git push , BIG GREEN BUTTIN 
 - User underscores for branch names
 
-
-
 Good to know:
 
 // Care e situatia acum? " pas de citit titlu, descriere, pret
@@ -33,3 +31,4 @@ Good to know:
 // cum sa construiesti si selectori mai complicati in testcafe: find / nth / withText/ withinText/ 
 //pasi specifici in TC. 
 //un extra pas: care e situatia acum?"
+// In between branches (a new branch ): faci checkout main, pull main, si checkout New branch.
