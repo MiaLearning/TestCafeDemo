@@ -4,7 +4,6 @@ import UserInfoRow from "./userPage";
 import mainPage from "../Pages/mainPage";
 import registrationFormPage from "./registrationFormPage";
 import { myUserDetails } from "../Constants/userInformation";
-export { myUserDetails } from "../Constants/userInformation";
 
 
 
@@ -72,16 +71,6 @@ class WebTablesPage {
         await t.click(this.pageSizeOption);
     }
 
-    async selectPageSize(pageSize) {
-        await webTablesPage.openPageSize();
-        await t.click(webTablesPage.pageSizeOption.withText(String(pageSize)));
-    
-        const expectedRowCount = pageSize;
-        const numberOfRowsInTable = await webTablesPage.rowLine.count;
-    
-        await t.expect(numberOfRowsInTable).eql(expectedRowCount);
-    }
-
     async goToNextPage() {
         await t.click(this.nextBttn);
     }
@@ -93,13 +82,13 @@ class WebTablesPage {
 
     async selectAnyOptions(optionValue) {
         await t.click(this.options.withAttribute('value', optionValue));
-
     }
 
     async addUsersToCount(count) {
         for (let userNumber = 1; userNumber <= count; userNumber++) {
-            myUserDetails.firstName = `Mia${userNumber.toString().padStart(2, '0')}`;
-            await this.addNewUser(myUserDetails);
+            const changableUserDetails = { ... myUserDetails}
+            changableUserDetails.firstName = `Mia${userNumber.toString().padStart(2, '0')}`;
+            await this.addNewUser(changableUserDetails);
         } 
     }
     

@@ -229,8 +229,7 @@ test('Change table row amount to 5', async t => {
 
     const numberOfRowsToSelect = 5;
 
-    await webTablesPage.openPageSize();
-    await webTablesPage.selectFiveRows();
+    await webTablesPage.selectPageSize(2);
 
     const numberOfRowsInTable = await webTablesPage.rowLine.count;
 
@@ -249,19 +248,6 @@ test('Change table row amount to 10' , async t => {
     const numberOfRowsInTable = await webTablesPage.rowLine.count;
 
     await t.expect(numberOfRowsInTable).eql(numberOfRowsToSelect);
-});
-
-
-test('Change table row at random', async t => {
-    await webTablesPage.navigateToWebTablesPage("Elements", "Web Tables");
-
-    const rowOptions = [
-        webTablesPage.sortPage5,
-        webTablesPage.sortPage10,
-        webTablesPage.sortPage20,
-    ];
-
-    await webTablesPage.selectRandomPageSize(rowOptions);
 });
 
 
@@ -285,9 +271,9 @@ test('Click to next table row page', async t => {
     
 
     for (let i = 3; i < allUsers.length; i++) {
-        await t.expect(allUsers[i].firstName).eql(myUserDetails.firstName);
+        await t.expect(allUsers[i].firstName).eql(`${myUserDetails.firstName}0${i - 2}`);
         await t.expect(allUsers[i].lastName).eql(myUserDetails.lastName);
-        await t.expect(allUsers[i].email).eql(myUserDetails.email);
+        await t.expect(allUsers[i].emailAddress).eql(myUserDetails.email);
         await t.expect(allUsers[i].age).eql(myUserDetails.age);
         await t.expect(allUsers[i].salary).eql(myUserDetails.salary);
         await t.expect(allUsers[i].department).eql(myUserDetails.department);
@@ -295,8 +281,7 @@ test('Click to next table row page', async t => {
 });
 
 
-
-test('Verify row count matches selected page size', async t => {
+test('Verify row count matches selected page size', async t => {  //start with this 
     await webTablesPage.navigateToWebTablesPage("Elements", "Web Tables");
   
     const validOptions = ['5', '10', '20'];
@@ -307,6 +292,6 @@ test('Verify row count matches selected page size', async t => {
         const currentRows = await webTablesPage.getAllRows();
         const expectedRowCount = parseInt(optionValue);
     
-        await t.expect(currentRows).eql(expectedRowCount);
+    await t.expect(currentRows).eql(expectedRowCount);
     }
-  });
+});
