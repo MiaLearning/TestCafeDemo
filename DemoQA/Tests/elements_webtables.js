@@ -1,4 +1,4 @@
-import { Selector, ClientFunction } from "testcafe";
+import { ClientFunction } from "testcafe";
 import { myUserDetails, newUserDetails } from "../Constants/userInformation";
 import mainPage from "../Pages/mainPage";
 import webTablesPage from "../Pages/webTablesPage";
@@ -221,4 +221,77 @@ test('Search table for department', async t => {
     const searchDepart =searchedUserDepartment[0].department;
 
     await t.expect(searchDepart).eql(randomUser.department);
+});
+
+
+test('Change table row amount to 5', async t => {
+    await webTablesPage.navigateToWebTablesPage("Elements", "Web Tables");
+
+    const numberOfRowsToSelect = 5;
+
+    await webTablesPage.selectPageSize(2);
+
+    const numberOfRowsInTable = await webTablesPage.rowLine.count;
+
+    await t.expect(numberOfRowsInTable).eql(numberOfRowsToSelect);
+});
+
+
+test('Change table row amount to 10' , async t => {
+    await webTablesPage.navigateToWebTablesPage("Elements", "Web Tables");
+
+    const numberOfRowsToSelect = 10;
+
+    await webTablesPage.openPageSize();
+    await webTablesPage.selectTenRows();
+
+    const numberOfRowsInTable = await webTablesPage.rowLine.count;
+
+    await t.expect(numberOfRowsInTable).eql(numberOfRowsToSelect);
+});
+
+
+test('Click to next table row page', async t => {
+    await webTablesPage.navigateToWebTablesPage("Elements", "Web Tables");
+
+    await t.expect(webTablesPage.nextBttn.hasAttribute('disabled')).ok();
+
+    await webTablesPage.addUsersToCount(8);
+
+    const usersPageOne = await webTablesPage.fetchValidUserDetails();
+
+    await webTablesPage.goToNextPage();
+    await t.expect(webTablesPage.jumptToPageInput.value).eql("2");
+    await t.expect(webTablesPage.previousBttn.hasAttribute('disabled')).notOk();
+    await t.expect(webTablesPage.nextBttn.hasAttribute('disabled')).ok();
+
+    const usersPageTwo = await webTablesPage.fetchValidUserDetails();
+    
+    const allUsers = usersPageOne.concat(usersPageTwo);
+    
+
+    for (let i = 3; i < allUsers.length; i++) {
+        await t.expect(allUsers[i].firstName).eql(`${myUserDetails.firstName}0${i - 2}`);
+        await t.expect(allUsers[i].lastName).eql(myUserDetails.lastName);
+        await t.expect(allUsers[i].emailAddress).eql(myUserDetails.email);
+        await t.expect(allUsers[i].age).eql(myUserDetails.age);
+        await t.expect(allUsers[i].salary).eql(myUserDetails.salary);
+        await t.expect(allUsers[i].department).eql(myUserDetails.department);
+    }
+});
+
+
+test('Verify row count matches selected page size', async t => {  //start with this 
+    await webTablesPage.navigateToWebTablesPage("Elements", "Web Tables");
+  
+    const validOptions = ['5', '10', '20'];
+  
+    for (const optionValue of validOptions) {
+        await webTablesPage.selectPageSize(optionValue);
+    
+        const currentRows = await webTablesPage.getAllRows();
+        const expectedRowCount = parseInt(optionValue);
+    
+    await t.expect(currentRows).eql(expectedRowCount);
+    }
 });

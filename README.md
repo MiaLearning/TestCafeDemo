@@ -15,8 +15,6 @@
 - After git push , BIG GREEN BUTTIN 
 - User underscores for branch names
 
-
-
 Good to know:
 
 // Care e situatia acum? " pas de citit titlu, descriere, pret
@@ -33,3 +31,11 @@ Good to know:
 // cum sa construiesti si selectori mai complicati in testcafe: find / nth / withText/ withinText/ 
 //pasi specifici in TC. 
 //un extra pas: care e situatia acum?"
+// In between branches (a new branch ): faci checkout main, pull main, si checkout New branch.
+//FUNCTII MICI CARE FAC O CHESTIE> SI BINE DENUMITE .
+// Best Practices:
+// Using page objects to encapsulate page-specific functionality and selectors,making 
+// the tests more readable and maintainable.
+// Using the fixture and test functions provided by TestCafe to structure the tests into logical units, improving organization and readability.
+// Using faker to generate random data for the test, avoiding hard-coded values that could make the test brittle.
+// Using async/await to handle asynchronous code.
